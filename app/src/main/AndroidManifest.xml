@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Network & Location Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TransbuddyApp"
+        tools:targetApi="31">
+
+        <!-- Google Maps API Key Meta-Data -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDe5pFoiZuP1zGA2yR8amD4iRl5nVlzfqg" />
+
+        <!-- Fleet Dashboard (Launcher) -->
+        <activity
+            android:name=".controllers.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Fuel & KM Logs -->
+        <activity
+            android:name=".controllers.FuelLogsActivity"
+            android:exported="false"
+            android:parentActivityName=".controllers.MainActivity" />
+
+        <!-- Penalties & Fines -->
+        <activity
+            android:name=".controllers.PenaltiesActivity"
+            android:exported="false"
+            android:parentActivityName=".controllers.MainActivity" />
+
+        <!-- Driver Operations / Driver Hub -->
+        <activity
+            android:name=".controllers.OperationsActivity"
+            android:exported="false"
+            android:parentActivityName=".controllers.MainActivity" />
+
+        <!-- Violations & Fee Alerts -->
+        <activity
+            android:name=".controllers.ViolationsActivity"
+            android:exported="false"
+            android:parentActivityName=".controllers.MainActivity" />
+
+        <!-- Home Search Hub (GR & Pickup Point Search) -->
+        <activity
+            android:name=".controllers.HomeSearchActivity"
+            android:exported="false"
+            android:parentActivityName=".controllers.MainActivity" />
+
+        <!-- Student Profile & Penalty Activity -->
+        <activity
+            android:name=".controllers.StudentDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".controllers.HomeSearchActivity" />
+
+    </application>
+
+</manifest>

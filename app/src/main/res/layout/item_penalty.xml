@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    item_penalty.xml
+    Single disciplinary action row inside the "Recent Disciplinary Actions" list.
+
+    Matches HTML:
+      <div class="p-4 rounded-xl neo-inset flex ... gap-4">
+        icon circle (neo-raised) | title + driverInfo | amount + more button
+      </div>
+-->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/surface_container"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="14dp">
+
+        <!-- Icon circle (neo-raised) -->
+        <FrameLayout
+            android:id="@+id/penaltyIconContainer"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_neo_raised_circle"
+            android:layout_marginEnd="14dp"
+            android:elevation="4dp">
+
+            <ImageView
+                android:id="@+id/ivPenaltyIcon"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_menu_directions"
+                app:tint="@color/error" />
+        </FrameLayout>
+
+        <!-- Title + driver info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvPenaltyTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Speeding Violation"
+                android:textColor="@color/on_surface"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvPenaltyDriver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="D-1042: Michael Chang • Oct 24, 2023"
+                android:textColor="@color/on_surface_variant"
+                android:textSize="11sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <!-- Amount -->
+        <TextView
+            android:id="@+id/tvPenaltyAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$150.00"
+            android:textColor="@color/error"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="10dp" />
+
+        <!-- More / Options button -->
+        <FrameLayout
+            android:id="@+id/btnPenaltyMore"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_neo_raised_circle"
+            android:elevation="3dp"
+            android:foreground="?attr/selectableItemBackgroundBorderless">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_menu_more"
+                app:tint="@color/on_surface_variant" />
+        </FrameLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

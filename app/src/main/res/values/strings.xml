@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Transbuddy</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- Google Maps API Key -->
+    <string name="google_maps_key">AIzaSyDe5pFoiZuP1zGA2yR8amD4iRl5nVlzfqg</string>
+
+    <!-- Aiven Database Credentials -->
+    <string name="db_name">defaultdb</string>
+    <string name="db_host">transbuddy-db-1-transbuddy.e.aivencloud.com</string>
+    <string name="db_port">20742</string>
+    <string name="db_user">avnadmin</string>
+    <string name="db_password">AVNS_IxUzga3f6XjSmzEv6Ej</string>
+</resources>

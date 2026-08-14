@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_student_detail.xml
+    Displays full student/faculty profile information and provides penalty notice creation with email dispatch.
+-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- ═══════════════════════════════════════════
+             TOP APP BAR TOOLBAR
+        ═══════════════════════════════════════════ -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/surface"
+            android:elevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_menu_hamburger"
+                    android:contentDescription="Back"
+                    android:layout_marginEnd="12dp"
+                    app:tint="@color/on_surface" />
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Student Profile &amp; Penalty"
+                    android:textColor="@color/on_surface"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <!-- MAIN SCROLLABLE CONTENT -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- ═══════════════════════════════════════════
+                     1. HERO PROFILE CARD
+                ═══════════════════════════════════════════ -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardBackgroundColor="@color/surface"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="6dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp"
+                        android:gravity="center_horizontal">
+
+                        <!-- Large Circular Profile Image -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="96dp"
+                            android:layout_height="96dp"
+                            android:layout_marginBottom="14dp"
+                            app:cardCornerRadius="48dp"
+                            app:cardElevation="4dp"
+                            app:cardBackgroundColor="@color/surface_container_high">
+
+                            <ImageView
+                                android:id="@+id/ivDetailPhoto"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@android:drawable/ic_menu_myplaces" />
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Full Student Name -->
+                        <TextView
+                            android:id="@+id/tvDetailName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Jenish Khakhkhar"
+                            android:textColor="@color/on_surface"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:gravity="center" />
+
+                        <!-- Member Type & Status Pill Row -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="6dp">
+
+                            <TextView
+                                android:id="@+id/tvDetailMemberType"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Student Roster"
+                                android:textColor="@color/primary"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:background="@drawable/bg_live_pill"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp"
+                                android:layout_marginEnd="8dp" />
+
+                            <TextView
+                                android:id="@+id/tvDetailStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Fee Paid"
+                                android:textColor="@color/on_primary"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:background="@drawable/bg_status_badge"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp" />
+                        </LinearLayout>
+
+                        <!-- GR & Enrollment Identifiers -->
+                        <TextView
+                            android:id="@+id/tvDetailGrEnroll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="GR NO: 122416 | ENROLLMENT: 92301733044"
+                            android:textColor="@color/on_surface_variant"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- ═══════════════════════════════════════════
+                     2. DETAILED ACADEMIC & TRANSIT DATA CARD
+                ═══════════════════════════════════════════ -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardBackgroundColor="@color/surface"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="6dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="RIDER INFORMATION"
+                            android:textColor="@color/primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="14dp" />
+
+                        <!-- Row 1: Department & Sem/Shift -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="DEPARTMENT"
+                                    android:textColor="@color/on_surface_variant"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvDetailDept"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="ICT-DEGREE"
+                                    android:textColor="@color/on_surface"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="SEMESTER &amp; SHIFT"
+                                    android:textColor="@color/on_surface_variant"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvDetailSemShift"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Sem 8 • Morning"
+                                    android:textColor="@color/on_surface"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Row 2: Pickup Location & Bus Route -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="PICKUP LOCATION"
+                                    android:textColor="@color/on_surface_variant"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvDetailPickup"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Gondal - Sanjay Society"
+                                    android:textColor="@color/on_surface"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="ASSIGNED BUS &amp; ROUTE"
+                                    android:textColor="@color/on_surface_variant"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvDetailBusRoute"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="TB-102 (Route 9)"
+                                    android:textColor="@color/on_surface"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Row 3: Email & Phone -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="OFFICIAL EMAIL"
+                                    android:textColor="@color/on_surface_variant"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvDetailEmail"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="jenish.khakhkhar@marwadi.edu"
+                                    android:textColor="@color/on_surface"
+                                    android:textSize="13sp"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="PHONE CONTACT"
+                                    android:textColor="@color/on_surface_variant"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvDetailPhone"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="+91 98250 12345"
+                                    android:textColor="@color/on_surface"
+                                    android:textSize="13sp"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- ═══════════════════════════════════════════
+                     3. ISSUE PENALTY FORM CARD
+                ═══════════════════════════════════════════ -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    app:cardBackgroundColor="@color/surface"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="6dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⚠️ ISSUE PENALTY &amp; NOTIFY"
+                            android:textColor="@color/error"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Fill in the penalty details below. Clicking Send will compose and dispatch an official penalty notification email directly to the student's email ID."
+                            android:textColor="@color/on_surface_variant"
+                            android:textSize="12sp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="16dp" />
+
+                        <!-- Reason of Penalty Input Field -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Reason of Penalty *"
+                            android:textColor="@color/on_surface"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="6dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="14dp"
+                            app:boxBackgroundColor="@color/surface_container_high"
+                            app:boxCornerRadiusTopStart="12dp"
+                            app:boxCornerRadiusTopEnd="12dp"
+                            app:boxCornerRadiusBottomStart="12dp"
+                            app:boxCornerRadiusBottomEnd="12dp"
+                            app:boxStrokeColor="@color/primary">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etPenaltyReason"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="e.g. Unapproved bus route usage, misconduct on bus TB-102, unpaid fee penalty"
+                                android:inputType="textMultiLine"
+                                android:minLines="3"
+                                android:gravity="top"
+                                android:textColor="@color/on_surface"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- Penalty Amount Field -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Penalty Fine Amount (₹) *"
+                            android:textColor="@color/on_surface"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="6dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="18dp"
+                            app:boxBackgroundColor="@color/surface_container_high"
+                            app:boxCornerRadiusTopStart="12dp"
+                            app:boxCornerRadiusTopEnd="12dp"
+                            app:boxCornerRadiusBottomStart="12dp"
+                            app:boxCornerRadiusBottomEnd="12dp"
+                            app:boxStrokeColor="@color/primary">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etPenaltyAmount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="500"
+                                android:inputType="number"
+                                android:textColor="@color/on_surface"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- Send Button -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSendPenaltyEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="54dp"
+                            android:text="✉️  SEND PENALTY EMAIL"
+                            android:textColor="@color/on_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            app:backgroundTint="@color/primary"
+                            app:cornerRadius="14dp"
+                            android:elevation="4dp" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

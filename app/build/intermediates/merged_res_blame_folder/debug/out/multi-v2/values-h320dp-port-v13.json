@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.transbuddy.app-mergeDebugResources-33:/values-h320dp-port-v13/values-h320dp-port-v13.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Shivam Bhatt\\.gradle\\caches\\8.12\\transforms\\82a6cd5bb1a94d7c1e28bff33ec91b1b\\transformed\\material-1.10.0\\res\\values-h320dp-port-v13\\values-h320dp-port-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "75",
+                        "endOffsets": "126"
+                    }
+                }
+            ]
+        }
+    ]
+}

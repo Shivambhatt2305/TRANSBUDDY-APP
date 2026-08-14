@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    item_gr_search.xml
+    Rider / Student GR search result item card displaying complete student profile details.
+-->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="14dp"
+    app:cardBackgroundColor="@color/surface"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Top Header Row: Profile Photo + Name + Identifiers + Status -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="top"
+            android:layout_marginBottom="12dp">
+
+            <!-- Profile Photo Container -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginEnd="14dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/surface_container_high">
+
+                <ImageView
+                    android:id="@+id/ivMemberPhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_menu_myplaces" />
+            </androidx.cardview.widget.CardView>
+
+            <!-- Name & Key Identifiers -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvStudentName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Alex Morgan"
+                    android:textColor="@color/on_surface"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <!-- GR No & Enrollment No -->
+                <TextView
+                    android:id="@+id/tvGrNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GR: 122434 | ENROLL: 92100123045"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="2dp" />
+
+                <!-- Department, Sem & Shift -->
+                <TextView
+                    android:id="@+id/tvDepartment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Computer Eng • Sem 6 (Shift 1)"
+                    android:textColor="@color/on_surface_variant"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+
+            <!-- Status Pill -->
+            <TextView
+                android:id="@+id/tvStudentStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fee Paid"
+                android:textColor="@color/on_primary"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_status_badge"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp" />
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/outline_variant"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Detail Grid Row 1: Bus & Pickup Point -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ASSIGNED BUS"
+                    android:textColor="@color/on_surface_variant"
+                    android:textSize="9sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvAssignedBus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TB-102 (Route 9)"
+                    android:textColor="@color/on_surface"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PICKUP POINT"
+                    android:textColor="@color/on_surface_variant"
+                    android:textSize="9sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvPickupPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Central Station, Gate 2"
+                    android:textColor="@color/on_surface"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Detail Grid Row 2: Email & Phone -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="EMAIL"
+                    android:textColor="@color/on_surface_variant"
+                    android:textSize="9sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="alex.morgan@marwadi.edu"
+                    android:textColor="@color/on_surface"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PHONE / CONTACT"
+                    android:textColor="@color/on_surface_variant"
+                    android:textSize="9sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+91 98765 43210"
+                    android:textColor="@color/on_surface"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Action Row: Issue Penalty Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnIssuePenalty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="⚠️ Issue Penalty"
+            android:textColor="@color/on_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/primary"
+            app:cornerRadius="12dp"
+            android:foreground="?attr/selectableItemBackground" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

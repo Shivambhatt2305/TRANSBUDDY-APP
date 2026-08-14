@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_main.xml
+    Fleet Dashboard - Faithful Android conversion of the HTML Transbuddy Fleet Dashboard.
+
+    Layout structure:
+    DrawerLayout
+      ├── ConstraintLayout (main content)
+      │   ├── AppBarLayout (Toolbar + title + avatar)
+      │   ├── NestedScrollView (scrollable canvas)
+      │   │   └── LinearLayout (vertical)
+      │   │       ├── Emergency Alert Banner
+      │   │       ├── Live Tracking Section Header
+      │   │       ├── Map Card (with bus markers overlaid)
+      │   │       ├── Active Fleet header + search
+      │   │       └── RecyclerView (vehicle list)
+      │   └── BottomNavigationView
+      └── NavigationView (drawer)
+-->
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface"
+    tools:context=".controllers.MainActivity">
+
+    <!-- ═══════════════════════════════════════════════════════
+         MAIN CONTENT
+    ═══════════════════════════════════════════════════════ -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- ─────────────────────────────────────────────────
+             TOP APP BAR
+        ───────────────────────────────────────────────── -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/surface"
+            android:elevation="6dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/surface"
+                android:paddingStart="4dp"
+                android:paddingEnd="12dp">
+
+                <!-- Hamburger menu button -->
+                <ImageButton
+                    android:id="@+id/btnMenu"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Open menu"
+                    android:src="@drawable/ic_menu_hamburger"
+                    app:tint="@color/primary" />
+
+                <!-- App title -->
+                <TextView
+                    android:id="@+id/tvToolbarTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Transbuddy"
+                    android:textColor="@color/primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- ─────────────────────────────────────────────────
+             SCROLLABLE CANVAS
+        ───────────────────────────────────────────────── -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollCanvas"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:paddingBottom="8dp">
+
+                <!-- ═══════════════════════════════════════════
+                     EMERGENCY ALERT BANNER
+                     Matches: border-l-4 border-error neo-raised
+                ═══════════════════════════════════════════ -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/alertBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    app:cardBackgroundColor="@color/surface"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="6dp">
+
+                    <!-- Inner content with left red border -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_alert_banner"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <!-- Alert icon in a raised circle -->
+                        <FrameLayout
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/bg_neo_inset_circle"
+                            android:layout_gravity="center_vertical"
+                            android:elevation="2dp">
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@android:drawable/ic_dialog_alert"
+                                app:tint="@color/error" />
+                        </FrameLayout>
+
+                        <!-- Alert text block -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="12dp"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Emergency Route Alert"
+                                android:textColor="@color/error"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="4dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Severe weather detected on Route 9. Fleet vehicles TB-102 and TB-442 are being automatically rerouted to secondary path."
+                                android:textColor="@color/on_surface_variant"
+                                android:textSize="12sp"
+                                android:lineSpacingExtra="2dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- ═══════════════════════════════════════════
+                     LIVE TRACKING SECTION HEADER
+                ═══════════════════════════════════════════ -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp"
+                    android:paddingHorizontal="2dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Live Tracking"
+                        android:textColor="@color/on_surface"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <!-- "● Live" pill badge -->
+                    <LinearLayout
+                        android:id="@+id/liveBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_live_pill"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:gravity="center_vertical"
+                        android:elevation="2dp">
+
+                        <View
+                            android:id="@+id/livePulse"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:background="@drawable/bg_neo_raised_circle"
+                            android:backgroundTint="@color/primary"
+                            android:layout_marginEnd="6dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Live"
+                            android:textColor="@color/primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- ═══════════════════════════════════════════
+                     MAP CARD
+                     Matches: bg-surface rounded-2xl neo-raised h-[400px]
+                ═══════════════════════════════════════════ -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/mapCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="280dp"
+                    android:layout_marginBottom="24dp"
+                    app:cardBackgroundColor="@color/surface"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="8dp">
+
+                    <!-- Inner inset container -->
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="8dp">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_map_container"
+                            android:clipChildren="true">
+
+                            <!-- Google Maps View -->
+                            <com.google.android.gms.maps.MapView
+                                android:id="@+id/googleMapView"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+
+                            <!-- ─────────────────────────────
+                                 BUS MARKER: TB-102 (Active - blue)
+                                 top: 30%, left: 40%
+                            ───────────────────────────── -->
+                            <LinearLayout
+                                android:id="@+id/markerTB102"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal"
+                                android:layout_gravity="top|start"
+                                android:translationX="0dp"
+                                android:translationY="0dp">
+
+                                <!-- Label pill -->
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="TB-102"
+                                    android:textColor="@color/primary"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold"
+                                    android:background="@drawable/bg_marker_pill"
+                                    android:paddingHorizontal="8dp"
+                                    android:paddingVertical="3dp"
+                                    android:layout_marginBottom="4dp"
+                                    android:elevation="4dp" />
+
+                                <!-- Icon circle (primary border) -->
+                                <FrameLayout
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:background="@drawable/bg_neo_raised_circle"
+                                    android:elevation="4dp">
+                                    <ImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_gravity="center"
+                                        android:src="@android:drawable/ic_menu_directions"
+                                        app:tint="@color/primary" />
+                                </FrameLayout>
+                            </LinearLayout>
+
+                            <!-- ─────────────────────────────
+                                 BUS MARKER: TB-442 (Delay - red)
+                                 top: 60%, left: 70%
+                            ───────────────────────────── -->
+                            <LinearLayout
+                                android:id="@+id/markerTB442"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal"
+                                android:layout_gravity="top|start"
+                                android:translationX="0dp"
+                                android:translationY="0dp">
+
+                                <!-- Label pill -->
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="TB-442"
+                                    android:textColor="@color/error"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold"
+                                    android:background="@drawable/bg_marker_pill"
+                                    android:paddingHorizontal="8dp"
+                                    android:paddingVertical="3dp"
+                                    android:layout_marginBottom="4dp"
+                                    android:elevation="4dp" />
+
+                                <!-- Icon circle (error/red border) -->
+                                <FrameLayout
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:background="@drawable/bg_neo_raised_circle"
+                                    android:elevation="4dp">
+                                    <ImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_gravity="center"
+                                        android:src="@android:drawable/ic_menu_directions"
+                                        app:tint="@color/error" />
+                                </FrameLayout>
+                            </LinearLayout>
+
+                        </FrameLayout>
+                    </FrameLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- ═══════════════════════════════════════════
+                     ACTIVE FLEET SECTION HEADER
+                ═══════════════════════════════════════════ -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Active Fleet"
+                    android:textColor="@color/on_surface"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:paddingHorizontal="2dp"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- ═══════════════════════════════════════════
+                     SEARCH BAR
+                     Matches: bg-surface neo-inset rounded-xl
+                ═══════════════════════════════════════════ -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_search_bar"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    android:layout_marginBottom="16dp"
+                    android:elevation="2dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_menu_search"
+                        android:layout_marginEnd="10dp"
+                        app:tint="@color/on_surface_variant" />
+
+                    <EditText
+                        android:id="@+id/etSearch"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="Search vehicle ID..."
+                        android:textColorHint="@color/on_surface_variant"
+                        android:textColor="@color/on_surface"
+                        android:textSize="14sp"
+                        android:inputType="text"
+                        android:imeOptions="actionSearch"
+                        android:singleLine="true" />
+                </LinearLayout>
+
+                <!-- ═══════════════════════════════════════════
+                     VEHICLE CARDS RECYCLER VIEW
+                ═══════════════════════════════════════════ -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewFleet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_vehicle" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ═══════════════════════════════════════════════════════
+         NAVIGATION DRAWER
+         Matches: NavigationDrawer (Desktop sidebar)
+    ═══════════════════════════════════════════════════════ -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/surface"
+        android:elevation="16dp"
+        app:headerLayout="@layout/nav_header"
+        app:itemIconTint="@color/nav_drawer_color"
+        app:itemTextColor="@color/nav_drawer_color"
+        app:menu="@menu/drawer_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

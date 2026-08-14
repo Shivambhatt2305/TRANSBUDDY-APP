@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_fleet"
+        android:title="Fleet"
+        android:icon="@android:drawable/ic_dialog_map" />
+    <item
+        android:id="@+id/nav_alerts"
+        android:title="Alerts"
+        android:icon="@android:drawable/ic_dialog_alert" />
+    <item
+        android:id="@+id/nav_ops"
+        android:title="Ops"
+        android:icon="@android:drawable/ic_menu_preferences" />
+    <item
+        android:id="@+id/nav_logs"
+        android:title="Logs"
+        android:icon="@android:drawable/ic_menu_recent_history" />
+    <item
+        android:id="@+id/nav_admin"
+        android:title="Admin"
+        android:icon="@android:drawable/ic_menu_manage" />
+</menu>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    item_violation.xml
+    Single alert row inside "Recent Alerts" list.
+
+    Matches HTML:
+      neo-pressed container | icon circle (neo-raised) | title + busInfo | time + action
+    Resolved items show opacity-70 and a "Resolved" chip instead of "Review" button.
+    This is handled in the adapter by toggling visibility of btnReview / chipResolved.
+-->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/surface_container"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="14dp">
+
+        <!-- Row 1: icon circle + title/busInfo + time -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Icon circle (neo-raised, coloured background) -->
+            <FrameLayout
+                android:id="@+id/violationIconBg"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_neo_raised_circle"
+                android:elevation="4dp"
+                android:layout_marginEnd="12dp">
+
+                <ImageView
+                    android:id="@+id/ivViolationIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/ic_dialog_alert"
+                    app:tint="@color/error" />
+            </FrameLayout>
+
+            <!-- Title + bus info -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvViolationTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Unauthorized Rider"
+                    android:textColor="@color/on_surface"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvViolationBusInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bus ID: TX-8492 • Route 15"
+                    android:textColor="@color/on_surface_variant"
+                    android:textSize="11sp"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+
+            <!-- Timestamp -->
+            <TextView
+                android:id="@+id/tvViolationTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10:42 AM"
+                android:textColor="@color/on_surface_variant"
+                android:textSize="11sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <!-- Row 2: action row (Review button OR Resolved chip) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginTop="10dp">
+
+            <!-- Review button (visible when NOT resolved) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btnViolationReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="4dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Review"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp" />
+            </androidx.cardview.widget.CardView>
+
+            <!-- Resolved chip (visible when resolved) -->
+            <TextView
+                android:id="@+id/chipResolved"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Resolved"
+                android:textColor="@color/on_surface_variant"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_search_bar"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

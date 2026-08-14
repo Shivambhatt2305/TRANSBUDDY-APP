@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_home_search.xml
+    Home Search Hub: GR Based Searching & Bus Searching based on Pickup Points.
+-->
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/homeDrawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- ─────────────────────────────────────────────────
+             TOP APP BAR
+        ───────────────────────────────────────────────── -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/homeAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/surface"
+            android:elevation="6dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/homeToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/surface"
+                android:paddingStart="4dp"
+                android:paddingEnd="12dp">
+
+                <ImageButton
+                    android:id="@+id/homeBtnMenu"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Open navigation menu"
+                    android:src="@drawable/ic_menu_hamburger"
+                    app:tint="@color/primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Transbuddy"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- ─────────────────────────────────────────────────
+             SCROLLABLE CANVAS
+        ───────────────────────────────────────────────── -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintTop_toBottomOf="@id/homeAppBar"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:paddingBottom="8dp">
+
+                <!-- ═══════════════════════════════════════════
+                     HEADER & SUBTITLE
+                ═══════════════════════════════════════════ -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GR &amp; Pickup Point Search"
+                    android:textColor="@color/on_surface"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="-0.02"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Search student records by GR number or locate buses assigned to pickup points."
+                    android:textColor="@color/on_surface_variant"
+                    android:textSize="13sp"
+                    android:layout_marginBottom="20dp" />
+
+
+
+                <!-- ═══════════════════════════════════════════
+                     SEARCH BAR (NEOMORPHIC INSET)
+                ═══════════════════════════════════════════ -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_search_bar"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="12dp"
+                    android:layout_marginBottom="20dp"
+                    android:elevation="2dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_menu_search"
+                        android:layout_marginEnd="10dp"
+                        app:tint="@color/primary" />
+
+                    <EditText
+                        android:id="@+id/etHomeSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="Enter GR Number (e.g. GR-2024-001)..."
+                        android:textColorHint="@color/on_surface_variant"
+                        android:textColor="@color/on_surface"
+                        android:textSize="14sp"
+                        android:inputType="text"
+                        android:singleLine="true" />
+                </LinearLayout>
+
+                <!-- ═══════════════════════════════════════════
+                     RESULTS SECTION TITLE
+                ═══════════════════════════════════════════ -->
+                <TextView
+                    android:id="@+id/tvSectionTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Student GR Search Results"
+                    android:textColor="@color/on_surface"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- RecyclerView for GR Search Results -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvGrResults"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="visible" />
+
+                <!-- RecyclerView for Pickup Point & Bus Results -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvPickupResults"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- NAVIGATION DRAWER -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/homeNavigationView"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/surface"
+        android:elevation="16dp"
+        app:headerLayout="@layout/nav_header"
+        app:itemIconTint="@color/nav_drawer_color"
+        app:itemTextColor="@color/nav_drawer_color"
+        app:menu="@menu/drawer_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

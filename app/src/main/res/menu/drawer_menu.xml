@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/drawer_dashboard"
+        android:title="Fleet Dashboard"
+        android:icon="@android:drawable/ic_dialog_map" />
+    <item
+        android:id="@+id/drawer_home_search"
+        android:title="GR &amp; Pickup Search"
+        android:icon="@android:drawable/ic_menu_search" />
+    <item
+        android:id="@+id/drawer_violations"
+        android:title="Violations"
+        android:icon="@android:drawable/ic_dialog_alert" />
+    <item
+        android:id="@+id/drawer_operations"
+        android:title="Operations"
+        android:icon="@android:drawable/ic_menu_preferences" />
+    <item
+        android:id="@+id/drawer_fuel"
+        android:title="Fuel Logs"
+        android:icon="@android:drawable/ic_menu_recent_history" />
+    <item
+        android:id="@+id/drawer_penalties"
+        android:title="Penalties"
+        android:icon="@android:drawable/ic_menu_agenda" />
+</menu>

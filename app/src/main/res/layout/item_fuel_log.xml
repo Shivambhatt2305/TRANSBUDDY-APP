@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    item_fuel_log.xml
+    Single recent fuel log entry card.
+    Matches: neo-surface rounded-2xl p-4 shadow-neo-raised flex items-center justify-between
+-->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/surface"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp">
+
+        <!-- Icon circle (neo-inset) -->
+        <FrameLayout
+            android:id="@+id/fuelLogIconContainer"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_neo_inset_circle"
+            android:layout_marginEnd="14dp"
+            android:elevation="1dp">
+
+            <ImageView
+                android:id="@+id/ivFuelLogIcon"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_menu_recent_history"
+                app:tint="@color/primary" />
+        </FrameLayout>
+
+        <!-- Station name + timestamp/liters -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvFuelStation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BP Station N4"
+                android:textColor="@color/on_surface"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvFuelTimestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Today, 08:30 AM • 45.2 L"
+                android:textColor="@color/on_surface_variant"
+                android:textSize="11sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <!-- Cost + trip km (right-aligned) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end">
+
+            <TextView
+                android:id="@+id/tvFuelCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$82.40"
+                android:textColor="@color/on_surface"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvFuelTrip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="320 km trip"
+                android:textColor="@color/on_surface_variant"
+                android:textSize="11sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
