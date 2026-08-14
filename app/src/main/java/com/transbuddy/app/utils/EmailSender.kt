@@ -30,6 +30,22 @@ object EmailSender {
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
+        sendHtmlEmailInBackground(
+            toEmail = toEmail,
+            subject = subject,
+            htmlContent = "<pre style=\"font-family:sans-serif;font-size:14px;\">$bodyText</pre>",
+            onSuccess = onSuccess,
+            onError = onError
+        )
+    }
+
+    fun sendHtmlEmailInBackground(
+        toEmail: String,
+        subject: String,
+        htmlContent: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
         val mainHandler = Handler(Looper.getMainLooper())
 
         Thread {
@@ -51,10 +67,10 @@ object EmailSender {
                 })
 
                 val message = MimeMessage(session).apply {
-                    setFrom(InternetAddress(SMTP_USER, "Transbuddy Fleet Management"))
+                    setFrom(InternetAddress(SMTP_USER, "Transportation Department - Marwadi University"))
                     setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail))
                     setSubject(subject, "UTF-8")
-                    setText(bodyText, "UTF-8")
+                    setContent(htmlContent, "text/html; charset=utf-8")
                 }
 
                 Transport.send(message)
