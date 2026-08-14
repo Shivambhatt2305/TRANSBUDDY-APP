@@ -4414,6 +4414,7 @@ class HomeSearchActivity : AppCompatActivity() {
 
         bindViews()
         setupToolbarAndDrawer()
+        preIndexStudentData()
         setupRecyclerViews()
         setupSearch()
     }
@@ -4482,12 +4483,18 @@ class HomeSearchActivity : AppCompatActivity() {
         val searchKey: String
     )
 
-    private val indexedStudentList by lazy {
-        studentList.map {
-            IndexedRider(
-                rider = it,
-                searchKey = "${it.grNumber} ${it.enrollmentNo} ${it.name} ${it.department} ${it.busId} ${it.pickupPoint} ${it.email} ${it.memberType}".lowercase()
-            )
+    @Volatile private var isIndexedReady = false
+    private var indexedStudentList: List<IndexedRider> = emptyList()
+
+    private fun preIndexStudentData() {
+        backgroundExecutor.execute {
+            indexedStudentList = studentList.map {
+                IndexedRider(
+                    rider = it,
+                    searchKey = "${it.grNumber} ${it.enrollmentNo} ${it.name} ${it.department} ${it.busId} ${it.pickupPoint} ${it.email} ${it.memberType}".lowercase()
+                )
+            }
+            isIndexedReady = true
         }
     }
 
@@ -4531,20 +4538,27 @@ class HomeSearchActivity : AppCompatActivity() {
     private fun setupSearch() {
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                val rawQuery = s?.toString() ?: ""
                 searchRunnable?.let { searchHandler.removeCallbacks(it) }
                 searchRunnable = Runnable {
-                    val rawQuery = s.toString()
+                    val queryLower = rawQuery.trim().lowercase()
                     backgroundExecutor.execute {
-                        val queryLower = rawQuery.trim().lowercase()
                         val filtered = if (queryLower.isEmpty()) {
                             studentList.take(50)
+                        } else if (!isIndexedReady) {
+                            studentList.filter {
+                                it.grNumber.contains(queryLower, ignoreCase = true) ||
+                                it.name.contains(queryLower, ignoreCase = true) ||
+                                it.enrollmentNo.contains(queryLower, ignoreCase = true)
+                            }.take(50)
                         } else {
                             indexedStudentList
                                 .asSequence()
                                 .filter { it.searchKey.contains(queryLower) }
                                 .map { it.rider }
-                                .take(100)
+                                .take(50)
                                 .toList()
                         }
                         runOnUiThread {
@@ -4552,9 +4566,8 @@ class HomeSearchActivity : AppCompatActivity() {
                         }
                     }
                 }
-                searchHandler.postDelayed(searchRunnable!!, 150)
+                searchHandler.postDelayed(searchRunnable!!, 60)
             }
-            override fun afterTextChanged(s: Editable?) {}
         })
     }
 
