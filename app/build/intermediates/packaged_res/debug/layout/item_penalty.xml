@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    item_penalty.xml
-    Single disciplinary action row inside the "Recent Disciplinary Actions" list.
-
-    Matches HTML:
-      <div class="p-4 rounded-xl neo-inset flex ... gap-4">
-        icon circle (neo-raised) | title + driverInfo | amount + more button
-      </div>
--->
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:cardBackgroundColor="@color/surface_container"
-    app:cardCornerRadius="14dp"
-    app:cardElevation="0dp">
+    android:layout_marginBottom="10dp"
+    app:cardBackgroundColor="@color/surface"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,25 +15,24 @@
         android:gravity="center_vertical"
         android:padding="14dp">
 
-        <!-- Icon circle (neo-raised) -->
+        <!-- Icon Container -->
         <FrameLayout
             android:id="@+id/penaltyIconContainer"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/bg_neo_raised_circle"
-            android:layout_marginEnd="14dp"
-            android:elevation="4dp">
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_search_bar"
+            android:layout_marginEnd="12dp">
 
             <ImageView
                 android:id="@+id/ivPenaltyIcon"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:src="@android:drawable/ic_menu_directions"
-                app:tint="@color/error" />
+                app:tint="@color/primary" />
         </FrameLayout>
 
-        <!-- Title + driver info -->
+        <!-- Driver Name & Infraction Title -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -50,50 +40,60 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvPenaltyTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Speeding Violation"
-                android:textColor="@color/on_surface"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-            <TextView
                 android:id="@+id/tvPenaltyDriver"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="D-1042: Michael Chang • Oct 24, 2023"
+                android:text="MR. SUDHIRBHAI BATUKBHAI BHUTA"
+                android:textColor="@color/on_surface"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvPenaltyTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Over Speeding In Campus Zone"
                 android:textColor="@color/on_surface_variant"
-                android:textSize="11sp"
-                android:layout_marginTop="2dp" />
+                android:textSize="12sp"
+                android:layout_marginTop="2dp"
+                android:maxLines="1"
+                android:ellipsize="end" />
         </LinearLayout>
 
-        <!-- Amount -->
-        <TextView
-            android:id="@+id/tvPenaltyAmount"
+        <!-- Fine Amount & More Button -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$150.00"
-            android:textColor="@color/error"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:layout_marginEnd="10dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginStart="8dp">
 
-        <!-- More / Options button -->
-        <FrameLayout
-            android:id="@+id/btnPenaltyMore"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:background="@drawable/bg_neo_raised_circle"
-            android:elevation="3dp"
-            android:foreground="?attr/selectableItemBackgroundBorderless">
+            <TextView
+                android:id="@+id/tvPenaltyAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹ 500"
+                android:textColor="@color/on_surface"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp" />
 
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_gravity="center"
-                android:src="@android:drawable/ic_menu_more"
-                app:tint="@color/on_surface_variant" />
-        </FrameLayout>
+            <FrameLayout
+                android:id="@+id/btnPenaltyMore"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/ic_menu_more"
+                    app:tint="@color/on_surface_variant" />
+            </FrameLayout>
+        </LinearLayout>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -98,6 +98,11 @@ class GrSearchAdapter(
 
     override fun getItemCount(): Int = students.size
 
+    fun updateData(newList: List<StudentRider>) {
+        students = newList
+        notifyDataSetChanged()
+    }
+
     fun filter(query: String, fullList: List<StudentRider>) {
         val trimmed = query.trim()
         students = if (trimmed.isEmpty()) {

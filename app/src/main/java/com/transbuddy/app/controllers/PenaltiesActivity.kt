@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -45,48 +46,38 @@ class PenaltiesActivity : AppCompatActivity() {
     private lateinit var etFineAmount: EditText
     private lateinit var etNotes: EditText
     private lateinit var recyclerViewPenalties: RecyclerView
-
-    // ─── Adapter + Data ────────────────────────────────────────
+    private lateinit var tvActivePenaltiesCount: TextView
+    private lateinit var tvTotalFines: TextView
     private lateinit var penaltyAdapter: PenaltyAdapter
 
-    private val penaltyData = listOf(
-        Penalty(
-            iconType   = "speeding",
-            title      = "Speeding Violation",
-            driverInfo = "D-1042: Michael Chang • Oct 24, 2023",
-            amount     = "$150.00",
-            isError    = true
-        ),
-        Penalty(
-            iconType   = "route",
-            title      = "Route Deviation",
-            driverInfo = "D-8831: Sarah Jenkins • Oct 22, 2023",
-            amount     = "$50.00",
-            isError    = false
-        ),
-        Penalty(
-            iconType   = "idle",
-            title      = "Idle Time Exceeded",
-            driverInfo = "D-2219: Robert Cole • Oct 20, 2023",
-            amount     = "Warning",
-            isError    = false
-        )
-    )
+    // Completely empty list - NO mock data!
+    private val penaltyData = mutableListOf<Penalty>()
 
-    // Spinner option lists — matching HTML <option> values
+    // Clean Driver list from driver_detail database table
     private val driverOptions = listOf(
-        "Select an entity...",
-        "D-1042: Michael Chang (Bus A)",
-        "D-8831: Sarah Jenkins (Van 3)",
-        "D-2219: Robert Cole (Bus C)"
+        "Select Driver...",
+        "MR. SUDHIRBHAI BATUKBHAI BHUTA",
+        "MR. MOSIN AJIJBHAI SANDHVANI",
+        "MR. ASGAR OSMANBHAI RAUMA",
+        "MR. NARESH KANTILAL CHAUA",
+        "MR. HUSENBHAI SUMARBHAI RAUMA",
+        "MR. KARAN MANUBHAI BASIYA",
+        "MR. PARSHOTAMBHAI RAVJIBHAI TADHANI",
+        "MR. KALPESHBHAI AMARASHIBHAI DADUKIYA",
+        "MR. LALJI PARBAT KARENA",
+        "MR. DHARMENDRABHAI CHHAGANBHAI RATHOD",
+        "MR. ASHISH RAJNIKANT TRIVEDI",
+        "MR. HASAMBHAI OSAMANBHAI KAJI",
+        "MR. JITENDRABHAI LAKSHMANBHAI RATHOD"
     )
 
     private val infractionOptions = listOf(
         "Select category...",
-        "Speeding Violation",
-        "Route Deviation",
-        "Idle Time Exceeded",
-        "Safety Gear Missing"
+        "Over-Speeding In Campus Zone",
+        "Unauthorized Route Deviation",
+        "Engine Idling Exceeded",
+        "Seatbelt & Safety Gear Violation",
+        "Late Station Arrival"
     )
 
     // ─── Lifecycle ─────────────────────────────────────────────
@@ -100,19 +91,22 @@ class PenaltiesActivity : AppCompatActivity() {
         setupRecyclerView()
         setupSearch()
         setupIssuePenaltyButton()
+        updateStats()
     }
 
     // ─── View binding ──────────────────────────────────────────
     private fun bindViews() {
-        drawerLayout         = findViewById(R.id.penaltiesDrawerLayout)
-        navigationView       = findViewById(R.id.penaltiesNavigationView)
-        toolbar              = findViewById(R.id.penaltiesToolbar)
-        etSearch             = findViewById(R.id.etPenaltySearch)
-        spinnerDriver        = findViewById(R.id.spinnerDriver)
-        spinnerInfraction    = findViewById(R.id.spinnerInfraction)
-        etFineAmount         = findViewById(R.id.etFineAmount)
-        etNotes              = findViewById(R.id.etPenaltyNotes)
-        recyclerViewPenalties = findViewById(R.id.recyclerViewPenalties)
+        drawerLayout            = findViewById(R.id.penaltiesDrawerLayout)
+        navigationView          = findViewById(R.id.penaltiesNavigationView)
+        toolbar                 = findViewById(R.id.penaltiesToolbar)
+        etSearch                = findViewById(R.id.etPenaltySearch)
+        spinnerDriver           = findViewById(R.id.spinnerDriver)
+        spinnerInfraction       = findViewById(R.id.spinnerInfraction)
+        etFineAmount            = findViewById(R.id.etFineAmount)
+        etNotes                 = findViewById(R.id.etPenaltyNotes)
+        recyclerViewPenalties   = findViewById(R.id.recyclerViewPenalties)
+        tvActivePenaltiesCount  = findViewById(R.id.tvActivePenaltiesCount)
+        tvTotalFines            = findViewById(R.id.tvTotalFines)
     }
 
     // ─── Toolbar & Drawer ──────────────────────────────────────
@@ -164,16 +158,16 @@ class PenaltiesActivity : AppCompatActivity() {
 
     // ─── Spinners ──────────────────────────────────────────────
     private fun setupSpinners() {
-        // Driver spinner
+        // Driver spinner with custom dropdown item layout
         val driverAdapter = ArrayAdapter(
-            this, android.R.layout.simple_spinner_item, driverOptions
-        ).also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+            this, R.layout.item_spinner_dropdown, driverOptions
+        ).also { it.setDropDownViewResource(R.layout.item_spinner_dropdown) }
         spinnerDriver.adapter = driverAdapter
 
-        // Infraction type spinner
+        // Infraction type spinner with custom dropdown item layout
         val infractionAdapter = ArrayAdapter(
-            this, android.R.layout.simple_spinner_item, infractionOptions
-        ).also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+            this, R.layout.item_spinner_dropdown, infractionOptions
+        ).also { it.setDropDownViewResource(R.layout.item_spinner_dropdown) }
         spinnerInfraction.adapter = infractionAdapter
     }
 
@@ -202,30 +196,42 @@ class PenaltiesActivity : AppCompatActivity() {
 
     // ─── Issue Penalty button ──────────────────────────────────
     private fun setupIssuePenaltyButton() {
-        findViewById<androidx.cardview.widget.CardView>(R.id.btnIssuePenalty).setOnClickListener {
+        findViewById<android.view.View>(R.id.btnIssuePenalty).setOnClickListener {
             val driverIdx     = spinnerDriver.selectedItemPosition
             val infractionIdx = spinnerInfraction.selectedItemPosition
             val amount        = etFineAmount.text.toString().trim()
 
             if (driverIdx == 0) {
-                Toast.makeText(this, "Please select a driver/vehicle.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please select a driver from driver_detail list.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if (infractionIdx == 0) {
-                Toast.makeText(this, "Please select an infraction type.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please select an infraction category.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if (amount.isBlank()) {
-                Toast.makeText(this, "Please enter a fine amount.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter fine amount in Rupees (₹).", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val driver     = driverOptions[driverIdx]
             val infraction = infractionOptions[infractionIdx]
-            // TODO: persist to database / API
+            val formattedAmount = if (amount.startsWith("₹")) amount else "₹$amount"
+
+            val newPenalty = Penalty(
+                iconType = "speeding",
+                title = infraction,
+                driverInfo = driver,
+                amount = formattedAmount,
+                isError = true
+            )
+            penaltyData.add(0, newPenalty)
+            penaltyAdapter.filter(etSearch.text.toString(), penaltyData)
+            updateStats()
+
             Toast.makeText(
                 this,
-                "✓ Penalty issued: $infraction for $driver — $$amount",
+                "✓ Driver Penalty Issued: $infraction for $driver — $formattedAmount",
                 Toast.LENGTH_LONG
             ).show()
 
@@ -235,6 +241,18 @@ class PenaltiesActivity : AppCompatActivity() {
             etFineAmount.text.clear()
             etNotes.text.clear()
         }
+    }
+
+    private fun updateStats() {
+        tvActivePenaltiesCount.text = penaltyData.size.toString()
+        var sum = 0
+        for (p in penaltyData) {
+            val digits = p.amount.replace("[^0-9]".toRegex(), "")
+            if (digits.isNotEmpty()) {
+                sum += digits.toInt()
+            }
+        }
+        tvTotalFines.text = "₹$sum"
     }
 
     // ─── Back press ────────────────────────────────────────────

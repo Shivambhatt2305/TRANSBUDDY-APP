@@ -76,9 +76,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="GR &amp; Pickup Point Search"
+                    android:text="Student Penalties"
                     android:textColor="@color/on_surface"
-                    android:textSize="24sp"
+                    android:textSize="26sp"
                     android:textStyle="bold"
                     android:letterSpacing="-0.02"
                     android:layout_marginBottom="4dp" />
@@ -86,7 +86,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Search student records by GR number or locate buses assigned to pickup points."
+                    android:text="Search student transport profiles by GR number, view pickup points or issue penalties."
                     android:textColor="@color/on_surface_variant"
                     android:textSize="13sp"
                     android:layout_marginBottom="20dp" />

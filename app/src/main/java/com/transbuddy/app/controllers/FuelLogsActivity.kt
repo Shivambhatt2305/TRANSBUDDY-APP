@@ -2,6 +2,11 @@ package com.transbuddy.app.controllers
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -14,13 +19,18 @@ import com.google.android.material.navigation.NavigationView
 import com.transbuddy.app.R
 import com.transbuddy.app.adapters.FuelLogAdapter
 import com.transbuddy.app.models.FuelLog
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
  * FuelLogsActivity — CONTROLLER (MVC)
  *
  * Manages the Fuel & KM Logs screen:
- *  - Fuel Details form (station, liters, cost, receipt scan)
- *  - Odometer Reading form (start KM, end KM)
+ *  - Refuel Information (Station, Fuel Type Dropdown [Diesel, CNG, Petrol], Fuel Price, Volume, Cost)
+ *  - Real-time automatic calculation of Total Cost = Volume * Price per Unit
+ *  - Single Current Odometer Reading (KM)
+ *  - Dynamic, clean list display of user-added fuel entries (NO mock data!)
  *  - Save Log Entry button
  *  - Recent Entries RecyclerView
  *  - Navigation Drawer + Bottom Nav Bar (Logs tab active)
@@ -32,15 +42,24 @@ class FuelLogsActivity : AppCompatActivity() {
     private lateinit var navigationView: NavigationView
     private lateinit var toolbar: Toolbar
     private lateinit var recyclerViewFuelLogs: RecyclerView
+    private lateinit var spinnerFuelType: Spinner
+    private lateinit var etLiters: EditText
+    private lateinit var etFuelPrice: EditText
+    private lateinit var etCost: EditText
+    private lateinit var etStation: EditText
+    private lateinit var etCurrentKm: EditText
 
-    // ─── Adapter + Data ────────────────────────────────────────
-    private lateinit var fuelLogAdapter: FuelLogAdapter
-
-    private val recentLogs = listOf(
-        FuelLog("BP Station N4",        "Today, 08:30 AM",      45.2,  82.40,  320, isRecent = true),
-        FuelLog("Chevron City Center",  "Yesterday, 17:15 PM",  38.0,  65.00,  215),
-        FuelLog("Shell Highway 1",      "Oct 12, 09:00 AM",     50.5,  91.20,  410)
+    // Fuel Type Options
+    private val fuelTypeOptions = listOf(
+        "Select Fuel Type...",
+        "Diesel",
+        "CNG",
+        "Petrol"
     )
+
+    // ─── Adapter + Dynamic Data (Empty start - NO mock data!) ─
+    private lateinit var fuelLogAdapter: FuelLogAdapter
+    private val fuelLogData = mutableListOf<FuelLog>()
 
     // ─── Lifecycle ─────────────────────────────────────────────
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +68,8 @@ class FuelLogsActivity : AppCompatActivity() {
 
         bindViews()
         setupToolbarAndDrawer()
+        setupFuelTypeSpinner()
+        setupAutoCostCalculation()
         setupRecyclerView()
         setupSaveButton()
         setupReceiptButton()
@@ -56,10 +77,53 @@ class FuelLogsActivity : AppCompatActivity() {
 
     // ─── View binding ──────────────────────────────────────────
     private fun bindViews() {
-        drawerLayout        = findViewById(R.id.fuelDrawerLayout)
-        navigationView      = findViewById(R.id.fuelNavigationView)
-        toolbar             = findViewById(R.id.fuelToolbar)
+        drawerLayout         = findViewById(R.id.fuelDrawerLayout)
+        navigationView       = findViewById(R.id.fuelNavigationView)
+        toolbar              = findViewById(R.id.fuelToolbar)
         recyclerViewFuelLogs = findViewById(R.id.recyclerViewFuelLogs)
+        spinnerFuelType      = findViewById(R.id.spinnerFuelType)
+        etStation            = findViewById(R.id.etStation)
+        etLiters             = findViewById(R.id.etLiters)
+        etFuelPrice          = findViewById(R.id.etFuelPrice)
+        etCost               = findViewById(R.id.etCost)
+        etCurrentKm          = findViewById(R.id.etCurrentKm)
+    }
+
+    // ─── Fuel Type Spinner ─────────────────────────────────────
+    private fun setupFuelTypeSpinner() {
+        val adapter = ArrayAdapter(
+            this, R.layout.item_spinner_dropdown, fuelTypeOptions
+        ).also { it.setDropDownViewResource(R.layout.item_spinner_dropdown) }
+        spinnerFuelType.adapter = adapter
+    }
+
+    // ─── Automatic Cost Calculation ───────────────────────────
+    private fun setupAutoCostCalculation() {
+        val watcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                calculateTotalCost()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        }
+        etLiters.addTextChangedListener(watcher)
+        etFuelPrice.addTextChangedListener(watcher)
+    }
+
+    private fun calculateTotalCost() {
+        val litersStr = etLiters.text.toString().trim()
+        val priceStr  = etFuelPrice.text.toString().trim()
+
+        if (litersStr.isNotEmpty() && priceStr.isNotEmpty()) {
+            try {
+                val liters = litersStr.toDouble()
+                val price  = priceStr.toDouble()
+                val total  = liters * price
+                etCost.setText(String.format(Locale.US, "%.2f", total))
+            } catch (e: NumberFormatException) {
+                // Ignore parse errors while typing
+            }
+        }
     }
 
     // ─── Toolbar & Navigation Drawer ───────────────────────────
@@ -114,7 +178,7 @@ class FuelLogsActivity : AppCompatActivity() {
 
     // ─── Recent Entries RecyclerView ───────────────────────────
     private fun setupRecyclerView() {
-        fuelLogAdapter = FuelLogAdapter(recentLogs)
+        fuelLogAdapter = FuelLogAdapter(fuelLogData)
         recyclerViewFuelLogs.apply {
             layoutManager = LinearLayoutManager(this@FuelLogsActivity)
             adapter = fuelLogAdapter
@@ -124,27 +188,62 @@ class FuelLogsActivity : AppCompatActivity() {
 
     // ─── Save Log Entry button ─────────────────────────────────
     private fun setupSaveButton() {
-        findViewById<androidx.cardview.widget.CardView>(R.id.btnSaveLog).setOnClickListener {
-            val station  = findViewById<android.widget.EditText>(R.id.etStation).text.toString()
-            val liters   = findViewById<android.widget.EditText>(R.id.etLiters).text.toString()
-            val cost     = findViewById<android.widget.EditText>(R.id.etCost).text.toString()
-            val startKm  = findViewById<android.widget.EditText>(R.id.etStartKm).text.toString()
-            val endKm    = findViewById<android.widget.EditText>(R.id.etEndKm).text.toString()
+        findViewById<android.view.View>(R.id.btnSaveLog).setOnClickListener {
+            val station     = etStation.text.toString().trim()
+            val fuelTypeIdx = spinnerFuelType.selectedItemPosition
+            val liters      = etLiters.text.toString().trim()
+            val price       = etFuelPrice.text.toString().trim()
+            val cost        = etCost.text.toString().trim()
+            val currentKm   = etCurrentKm.text.toString().trim()
 
-            if (station.isBlank() || liters.isBlank() || cost.isBlank() || endKm.isBlank()) {
+            if (station.isBlank()) {
+                Toast.makeText(this, "Please enter station name / location.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (fuelTypeIdx == 0) {
+                Toast.makeText(this, "Please select a fuel type (Diesel, CNG, or Petrol).", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (liters.isBlank() || price.isBlank() || cost.isBlank() || currentKm.isBlank()) {
                 Toast.makeText(this, "Please fill in all required fields.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // TODO: Persist to database / send to API
-            Toast.makeText(this, "✓ Log entry saved!", Toast.LENGTH_SHORT).show()
+            val selectedFuel = fuelTypeOptions[fuelTypeIdx]
+            val timestamp    = SimpleDateFormat("MMM dd, hh:mm a", Locale.getDefault()).format(Date())
+
+            val newLog = FuelLog(
+                stationName = "$station ($selectedFuel)",
+                timestamp = timestamp,
+                liters = liters.toDoubleOrNull() ?: 0.0,
+                totalCost = cost.toDoubleOrNull() ?: 0.0,
+                tripKm = currentKm.toIntOrNull() ?: 0,
+                isRecent = true
+            )
+
+            // Add user log entry dynamically
+            fuelLogData.add(0, newLog)
+            fuelLogAdapter.updateData(fuelLogData.toList())
+
+            Toast.makeText(
+                this,
+                "✓ Fuel Log Saved: $selectedFuel at ₹$price/unit — Total: ₹$cost",
+                Toast.LENGTH_LONG
+            ).show()
+
+            // Reset form
+            etStation.text.clear()
+            spinnerFuelType.setSelection(0)
+            etLiters.text.clear()
+            etFuelPrice.text.clear()
+            etCost.text.clear()
+            etCurrentKm.text.clear()
         }
     }
 
     // ─── Receipt Scan button ───────────────────────────────────
     private fun setupReceiptButton() {
-        findViewById<androidx.cardview.widget.CardView>(R.id.btnScanReceipt).setOnClickListener {
-            // TODO: Launch camera / image picker intent
+        findViewById<android.view.View>(R.id.btnScanReceipt).setOnClickListener {
             Toast.makeText(this, "Camera feature coming soon.", Toast.LENGTH_SHORT).show()
         }
     }

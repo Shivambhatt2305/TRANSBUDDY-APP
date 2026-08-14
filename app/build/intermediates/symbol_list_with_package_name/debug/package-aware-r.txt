@@ -3021,6 +3021,12 @@ drawable bg_alert_banner
 drawable bg_badge_active
 drawable bg_badge_delay
 drawable bg_badge_offline
+drawable bg_btn_fuel_save
+drawable bg_btn_issue_penalty
+drawable bg_btn_issue_penalty_filled
+drawable bg_btn_primary_simple
+drawable bg_clean_card
+drawable bg_emerald_badge
 drawable bg_live_pill
 drawable bg_map_container
 drawable bg_marker_pill
@@ -3029,6 +3035,7 @@ drawable bg_neo_inset_circle
 drawable bg_neo_raised
 drawable bg_neo_raised_circle
 drawable bg_search_bar
+drawable bg_status_active_pill
 drawable bg_status_badge
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
@@ -3369,8 +3376,9 @@ id endToStart
 id enterAlways
 id enterAlwaysCollapsed
 id etCost
-id etEndKm
+id etCurrentKm
 id etFineAmount
+id etFuelPrice
 id etHomeSearch
 id etLiters
 id etPenaltyAmount
@@ -3378,7 +3386,6 @@ id etPenaltyNotes
 id etPenaltyReason
 id etPenaltySearch
 id etSearch
-id etStartKm
 id etStation
 id etViolationSearch
 id exitUntilCollapsed
@@ -3669,6 +3676,7 @@ id south
 id spacer
 id special_effects_controller_view_tag
 id spinnerDriver
+id spinnerFuelType
 id spinnerInfraction
 id spline
 id split_action_bar
@@ -3968,6 +3976,7 @@ layout item_gr_search
 layout item_penalty
 layout item_pickup_bus
 layout item_shift_log
+layout item_spinner_dropdown
 layout item_vehicle
 layout item_violation
 layout m3_alert_dialog

@@ -6,11 +6,11 @@
         android:icon="@android:drawable/ic_dialog_map" />
     <item
         android:id="@+id/drawer_home_search"
-        android:title="GR &amp; Pickup Search"
+        android:title="Student Penalties"
         android:icon="@android:drawable/ic_menu_search" />
     <item
         android:id="@+id/drawer_violations"
-        android:title="Violations"
+        android:title="Alerts &amp; Notifications"
         android:icon="@android:drawable/ic_dialog_alert" />
     <item
         android:id="@+id/drawer_operations"
@@ -22,6 +22,6 @@
         android:icon="@android:drawable/ic_menu_recent_history" />
     <item
         android:id="@+id/drawer_penalties"
-        android:title="Penalties"
+        android:title="Driver Penalties"
         android:icon="@android:drawable/ic_menu_agenda" />
 </menu>

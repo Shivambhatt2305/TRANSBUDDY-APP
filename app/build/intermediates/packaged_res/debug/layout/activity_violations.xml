@@ -93,7 +93,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Violation &amp; Fee Alerts"
+                    android:text="Alerts &amp; Notifications"
                     android:textColor="@color/on_surface"
                     android:textSize="24sp"
                     android:textStyle="bold"
@@ -103,7 +103,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Monitor unauthorized access and unpaid fees in real-time."
+                    android:text="Real-time campus transit alerts, safety notices &amp; fee updates."
                     android:textColor="@color/on_surface_variant"
                     android:textSize="13sp"
                     android:layout_marginBottom="20dp" />

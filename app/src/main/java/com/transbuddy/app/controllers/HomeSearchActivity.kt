@@ -58,7 +58,8 @@ class HomeSearchActivity : AppCompatActivity() {
     }
 
     // Real Student & Faculty records sourced directly from database tables (`students_detail` & `faculty_detail`)
-    private val studentList = listOf(
+    private val studentList by lazy {
+        listOf(
         StudentRider(
             grNumber     = "116617",
             enrollmentNo = "92200133003",
@@ -4395,7 +4396,7 @@ class HomeSearchActivity : AppCompatActivity() {
             memberType   = "Faculty",
             photoUrl     = StudentRider.buildFacultyPhotoUrl("3206")
         )
-    )
+    ) }
 
     // Data for Pickup Points with Assigned Buses & Driver Photos
     private val pickupBusList = listOf(
@@ -4475,9 +4476,26 @@ class HomeSearchActivity : AppCompatActivity() {
         navigationView.setCheckedItem(R.id.drawer_home_search)
     }
 
+    // ─── Pre-Indexed Search Engine ─────────────────────────────
+    private class IndexedRider(
+        val rider: StudentRider,
+        val searchKey: String
+    )
+
+    private val indexedStudentList by lazy {
+        studentList.map {
+            IndexedRider(
+                rider = it,
+                searchKey = "${it.grNumber} ${it.enrollmentNo} ${it.name} ${it.department} ${it.busId} ${it.pickupPoint} ${it.email} ${it.memberType}".lowercase()
+            )
+        }
+    }
+
     // ─── RecyclerView Setup ────────────────────────────────────
+    private val backgroundExecutor = java.util.concurrent.Executors.newSingleThreadExecutor()
+
     private fun setupRecyclerViews() {
-        grAdapter = GrSearchAdapter(studentList)
+        grAdapter = GrSearchAdapter(emptyList())
         rvGrResults.apply {
             layoutManager = LinearLayoutManager(this@HomeSearchActivity)
             adapter = grAdapter
@@ -4496,9 +4514,17 @@ class HomeSearchActivity : AppCompatActivity() {
             recycledViewPool.setMaxRecycledViews(0, 30)
             isNestedScrollingEnabled = false
         }
+
+        // Asynchronously populate initial top 50 records for instant 60 FPS screen rendering!
+        backgroundExecutor.execute {
+            val initial = studentList.take(50)
+            runOnUiThread {
+                grAdapter.updateData(initial)
+            }
+        }
     }
 
-    // ─── Realtime Search Debounced ─────────────────────────────
+    // ─── Realtime Search Debounced & Asynchronous ─────────────────────
     private val searchHandler = Handler(Looper.getMainLooper())
     private var searchRunnable: Runnable? = null
 
@@ -4508,8 +4534,23 @@ class HomeSearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchRunnable?.let { searchHandler.removeCallbacks(it) }
                 searchRunnable = Runnable {
-                    val query = s.toString()
-                    grAdapter.filter(query, studentList)
+                    val rawQuery = s.toString()
+                    backgroundExecutor.execute {
+                        val queryLower = rawQuery.trim().lowercase()
+                        val filtered = if (queryLower.isEmpty()) {
+                            studentList.take(50)
+                        } else {
+                            indexedStudentList
+                                .asSequence()
+                                .filter { it.searchKey.contains(queryLower) }
+                                .map { it.rider }
+                                .take(100)
+                                .toList()
+                        }
+                        runOnUiThread {
+                            grAdapter.updateData(filtered)
+                        }
+                    }
                 }
                 searchHandler.postDelayed(searchRunnable!!, 150)
             }

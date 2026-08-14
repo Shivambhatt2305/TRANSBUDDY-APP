@@ -42,7 +42,7 @@ class FuelLogAdapter(
 
         holder.tvStation.text   = log.stationName
         holder.tvTimestamp.text = "${log.timestamp} • ${"%.1f".format(log.liters)} L"
-        holder.tvCost.text      = "$${"%.2f".format(log.totalCost)}"
+        holder.tvCost.text      = "₹ ${"%.2f".format(log.totalCost)}"
         holder.tvTrip.text      = "${log.tripKm} km trip"
 
         // Most-recent entry → primary icon tint; others → grey
