@@ -125,6 +125,9 @@ class OperationsActivity : AppCompatActivity() {
                 R.id.drawer_violations -> {
                     startActivity(Intent(this, ViolationsActivity::class.java)); finish()
                 }
+                R.id.drawer_emergency -> {
+                    startActivity(Intent(this, EmergencyNotificationsActivity::class.java)); finish()
+                }
                 R.id.drawer_operations -> { /* already here */ }
             }
             drawerLayout.closeDrawer(GravityCompat.START)

@@ -186,6 +186,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 R.id.drawer_violations -> {
                     startActivity(Intent(this, ViolationsActivity::class.java))
                 }
+                R.id.drawer_emergency -> {
+                    startActivity(Intent(this, EmergencyNotificationsActivity::class.java))
+                }
                 R.id.drawer_dashboard -> { /* already here */ }
             }
             drawerLayout.closeDrawer(GravityCompat.START)

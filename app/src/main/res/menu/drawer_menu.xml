@@ -24,4 +24,8 @@
         android:id="@+id/drawer_penalties"
         android:title="Driver Penalties"
         android:icon="@android:drawable/ic_menu_agenda" />
+    <item
+        android:id="@+id/drawer_emergency"
+        android:title="Emergency Notifications"
+        android:icon="@android:drawable/ic_dialog_alert" />
 </menu>

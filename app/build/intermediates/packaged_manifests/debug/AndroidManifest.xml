@@ -42,7 +42,8 @@
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:testOnly="true"
-        android:theme="@style/Theme.TransbuddyApp" >
+        android:theme="@style/Theme.TransbuddyApp"
+        android:usesCleartextTraffic="true" >
 
         <!-- Google Maps API Key Meta-Data -->
         <meta-data
@@ -95,6 +96,12 @@
             android:name="com.transbuddy.app.controllers.StudentDetailActivity"
             android:exported="false"
             android:parentActivityName="com.transbuddy.app.controllers.HomeSearchActivity" />
+
+        <!-- Emergency Notifications -->
+        <activity
+            android:name="com.transbuddy.app.controllers.EmergencyNotificationsActivity"
+            android:exported="false"
+            android:parentActivityName="com.transbuddy.app.controllers.MainActivity" />
 
         <!-- Needs to be explicitly declared on P+ -->
         <uses-library

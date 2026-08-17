@@ -3,16 +3,15 @@ package com.transbuddy.app.config
 /**
  * AppConfig — Central Configuration Object for Transbuddy Android App
  *
- * Holds database credentials and API key constants for network and maps integration.
+ * Holds public client configuration only. Database credentials belong in the backend.
  */
 object AppConfig {
-    // Database credentials (Aiven Cloud MySQL / PostgreSQL)
-    const val DB_NAME     = "defaultdb"
-    const val DB_HOST     = "transbuddy-db-1-transbuddy.e.aivencloud.com"
-    const val DB_PORT     = 20742
-    const val DB_USER     = "avnadmin"
-    const val DB_PASSWORD = "AVNS_IxUzga3f6XjSmzEv6Ej"
-
     // Google Maps API Key
     const val GOOGLE_MAPS_API_KEY = "AIzaSyDe5pFoiZuP1zGA2yR8amD4iRl5nVlzfqg"
+
+    // Base URL of the backend API server.
+    // - For local Android Emulator: "http://10.0.2.2:3000"
+    // - For local Physical Device: "http://<YOUR_LOCAL_IP>:3000" (e.g. "http://192.168.1.50:3000")
+    // - For deployed Production server: "https://your-backend-domain.com"
+    const val API_BASE_URL = "https://transbuddy-web-backend.onrender.com/api"
 }

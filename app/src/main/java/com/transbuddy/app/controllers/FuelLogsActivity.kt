@@ -168,6 +168,10 @@ class FuelLogsActivity : AppCompatActivity() {
                     startActivity(Intent(this, ViolationsActivity::class.java))
                     finish()
                 }
+                R.id.drawer_emergency -> {
+                    startActivity(Intent(this, EmergencyNotificationsActivity::class.java))
+                    finish()
+                }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             true

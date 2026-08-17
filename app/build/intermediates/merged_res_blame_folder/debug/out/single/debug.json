@@ -1,11 +1,87 @@
 [
     {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_ic_launcher.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\ic_launcher.xml"
-    },
-    {
         "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_badge_offline.xml.flat",
         "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_badge_offline.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_item_shift_log.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\item_shift_log.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_live_pill.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_live_pill.xml"
+    },
+    {
+        "merged": "com.transbuddy.app-merged_res-35:/layout_activity_emergency_notifications.xml.flat",
+        "source": "com.transbuddy.app-main-37:/layout/activity_emergency_notifications.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_activity_operations.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\activity_operations.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_map_container.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_map_container.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_btn_issue_penalty.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_btn_issue_penalty.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_activity_violations.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\activity_violations.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_search_bar.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_search_bar.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_item_violation.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\item_violation.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_status_badge.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_status_badge.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\xml\\backup_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_ic_menu_hamburger.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\ic_menu_hamburger.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\color_nav_drawer_color.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\color\\nav_drawer_color.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_item_emergency.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\item_emergency.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\color_bottom_nav_color.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\color\\bottom_nav_color.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_marker_pill.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_marker_pill.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_neo_inset_circle.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_neo_inset_circle.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_nav_header.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\nav_header.xml"
+    },
+    {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_ic_launcher.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\ic_launcher.xml"
     },
     {
         "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_btn_primary_simple.xml.flat",
@@ -32,28 +108,12 @@
         "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\item_spinner_dropdown.xml"
     },
     {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_item_shift_log.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\item_shift_log.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_live_pill.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_live_pill.xml"
-    },
-    {
         "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_activity_main.xml.flat",
         "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\activity_main.xml"
     },
     {
-        "merged": "com.transbuddy.app-merged_res-35:/layout_activity_fuel_logs.xml.flat",
-        "source": "com.transbuddy.app-main-37:/layout/activity_fuel_logs.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_activity_operations.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\activity_operations.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_map_container.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_map_container.xml"
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_email_footer.png.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\email_footer.png"
     },
     {
         "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_item_penalty.xml.flat",
@@ -64,40 +124,12 @@
         "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\item_gr_search.xml"
     },
     {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_btn_issue_penalty.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_btn_issue_penalty.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_activity_violations.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\activity_violations.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_search_bar.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_search_bar.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_item_violation.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\item_violation.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_status_badge.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_status_badge.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_activity_fuel_logs.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\activity_fuel_logs.xml"
-    },
-    {
         "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_item_pickup_bus.xml.flat",
         "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\item_pickup_bus.xml"
     },
     {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\xml_backup_rules.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\xml\\backup_rules.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_ic_menu_hamburger.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\ic_menu_hamburger.xml"
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_activity_fuel_logs.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\activity_fuel_logs.xml"
     },
     {
         "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_btn_fuel_save.xml.flat",
@@ -116,16 +148,12 @@
         "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\activity_student_detail.xml"
     },
     {
+        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_activity_emergency_notifications.xml.flat",
+        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\activity_emergency_notifications.xml"
+    },
+    {
         "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_btn_issue_penalty_filled.xml.flat",
         "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_btn_issue_penalty_filled.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\color_nav_drawer_color.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\color\\nav_drawer_color.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\xml_data_extraction_rules.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\xml\\data_extraction_rules.xml"
     },
     {
         "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_item_vehicle.xml.flat",
@@ -134,10 +162,6 @@
     {
         "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_clean_card.xml.flat",
         "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_clean_card.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\color_bottom_nav_color.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\color\\bottom_nav_color.xml"
     },
     {
         "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_activity_home_search.xml.flat",
@@ -156,24 +180,12 @@
         "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\menu\\drawer_menu.xml"
     },
     {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_neo_inset_circle.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_neo_inset_circle.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_marker_pill.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_marker_pill.xml"
-    },
-    {
         "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\drawable_bg_neo_raised.xml.flat",
         "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\drawable\\bg_neo_raised.xml"
     },
     {
         "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_activity_penalties.xml.flat",
         "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\activity_penalties.xml"
-    },
-    {
-        "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\layout_nav_header.xml.flat",
-        "source": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-main-37:\\layout\\nav_header.xml"
     },
     {
         "merged": "C:\\Users\\Shivam Bhatt\\.gradle\\daemon\\8.12\\com.transbuddy.app-merged_res-35:\\menu_bottom_nav_menu.xml.flat",

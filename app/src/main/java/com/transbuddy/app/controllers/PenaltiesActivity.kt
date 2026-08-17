@@ -22,6 +22,7 @@ import com.google.android.material.navigation.NavigationView
 import com.transbuddy.app.R
 import com.transbuddy.app.adapters.PenaltyAdapter
 import com.transbuddy.app.models.Penalty
+import java.util.Locale
 
 /**
  * PenaltiesActivity — CONTROLLER (MVC)
@@ -80,19 +81,59 @@ class PenaltiesActivity : AppCompatActivity() {
         "Late Station Arrival"
     )
 
+    private lateinit var dbHelper: com.transbuddy.app.utils.PenaltyDatabaseHelper
+
     // ─── Lifecycle ─────────────────────────────────────────────
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_penalties)
+        try {
+            setContentView(R.layout.activity_penalties)
+            dbHelper = com.transbuddy.app.utils.PenaltyDatabaseHelper.getInstance(this)
+            bindViews()
+            setupToolbarAndDrawer()
+            setupSpinners()
+            setupRecyclerView()
+            setupSearch()
+            setupIssuePenaltyButton()
+            loadPenaltiesFromDb()
+        } catch (e: Exception) {
+            android.util.Log.e("PenaltiesActivity", "Initialization notice: ${e.message}", e)
+        }
+    }
 
-        bindViews()
-        setupToolbarAndDrawer()
-        setupSpinners()
-        setupRecyclerView()
-        setupSearch()
-        setupIssuePenaltyButton()
+    private fun loadPenaltiesFromDb() {
+        // Local storage is the source of truth for instant UI updates.
+        val localList = dbHelper.getAllPenalties()
+        showPenalties(localList)
+
+        // Cloud access goes through the backend API, never direct JDBC from Android.
+        if (!com.transbuddy.app.utils.CloudDatabaseManager.isConfigured()) return
+        com.transbuddy.app.utils.CloudDatabaseManager.fetchAllPenaltiesFromCloud { cloudList ->
+            if (cloudList.isNotEmpty()) {
+                // A cloud read can be stale while a new record is being uploaded.
+                // Merge it with local records instead of replacing local data.
+                showPenalties(mergeCloudAndLocal(cloudList, dbHelper.getAllPenalties()))
+            }
+        }
+    }
+
+    private fun showPenalties(records: List<Penalty>) {
+        penaltyData.clear()
+        penaltyData.addAll(records)
+        penaltyAdapter.filter(etSearch.text.toString(), penaltyData)
         updateStats()
     }
+
+    private fun mergeCloudAndLocal(cloud: List<Penalty>, local: List<Penalty>): List<Penalty> {
+        val merged = cloud.toMutableList()
+        val cloudKeys = cloud.mapTo(mutableSetOf()) { it.displayKey() }
+        local.forEach { penalty ->
+            if (cloudKeys.add(penalty.displayKey())) merged.add(penalty)
+        }
+        return merged
+    }
+
+    private fun Penalty.displayKey(): String = "$driverInfo|$title|$amount"
 
     // ─── View binding ──────────────────────────────────────────
     private fun bindViews() {
@@ -147,6 +188,10 @@ class PenaltiesActivity : AppCompatActivity() {
                 }
                 R.id.drawer_violations -> {
                     startActivity(Intent(this, ViolationsActivity::class.java))
+                    finish()
+                }
+                R.id.drawer_emergency -> {
+                    startActivity(Intent(this, EmergencyNotificationsActivity::class.java))
                     finish()
                 }
             }
@@ -218,22 +263,58 @@ class PenaltiesActivity : AppCompatActivity() {
             val infraction = infractionOptions[infractionIdx]
             val formattedAmount = if (amount.startsWith("₹")) amount else "₹$amount"
 
+            val numericAmount = amount.replace("[^0-9.]".toRegex(), "").toDoubleOrNull() ?: 500.00
+            val driverId = "DRV-${100 + driverIdx}"
+            val notesStr = etNotes.text.toString().trim()
+
             val newPenalty = Penalty(
+                targetType = "DRIVER",
+                targetId = driverId,
+                targetName = driver,
+                targetEmail = "driver.transport@marwadi.edu",
+                infractionCategory = infraction,
+                infractionReason = infraction,
+                amountNum = numericAmount,
+                amount = formattedAmount,
+                notes = if (notesStr.isNotEmpty()) notesStr else "Assigned via TransBuddy App",
+                status = "PENDING",
+                assignedBy = "Android App",
                 iconType = "speeding",
                 title = infraction,
-                driverInfo = driver,
-                amount = formattedAmount,
+                driverInfo = "$driver • DRIVER",
                 isError = true
             )
-            penaltyData.add(0, newPenalty)
-            penaltyAdapter.filter(etSearch.text.toString(), penaltyData)
-            updateStats()
+            
+            // 1. Save to Local SQLite DB Table
+            val rowId = dbHelper.insertPenalty(newPenalty)
+            if (rowId != -1L) {
+                // Show the persisted record straight away; cloud sync must not
+                // delay or replace the local result.
+                showPenalties(listOf(newPenalty.copy(id = rowId)) + penaltyData)
+                Toast.makeText(
+                    this,
+                    "✓ Saved to Local DB & Syncing to Cloud MySQL DB...",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                Toast.makeText(this, "Could not save the penalty locally. Please try again.", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
 
-            Toast.makeText(
-                this,
-                "✓ Driver Penalty Issued: $infraction for $driver — $formattedAmount",
-                Toast.LENGTH_LONG
-            ).show()
+            // 2. Sync through the backend API to MySQL Database.
+            com.transbuddy.app.utils.CloudDatabaseManager.syncPenaltyToCloud(
+                penalty = newPenalty,
+                onSuccess = {
+                    Toast.makeText(
+                        this,
+                        "☁️ Live Synced to Admin Cloud DB: $infraction for $driver",
+                        Toast.LENGTH_LONG
+                    ).show()
+                },
+                onError = { err ->
+                    Toast.makeText(this, "Penalty saved locally. Cloud sync: $err", Toast.LENGTH_LONG).show()
+                }
+            )
 
             // Reset form
             spinnerDriver.setSelection(0)
@@ -245,14 +326,14 @@ class PenaltiesActivity : AppCompatActivity() {
 
     private fun updateStats() {
         tvActivePenaltiesCount.text = penaltyData.size.toString()
-        var sum = 0
+        var sum = 0.0
         for (p in penaltyData) {
-            val digits = p.amount.replace("[^0-9]".toRegex(), "")
-            if (digits.isNotEmpty()) {
-                sum += digits.toInt()
+            val valNum = if (p.amountNum > 0) p.amountNum else {
+                p.amount.replace("[^0-9.]".toRegex(), "").toDoubleOrNull() ?: 0.0
             }
+            sum += valNum
         }
-        tvTotalFines.text = "₹$sum"
+        tvTotalFines.text = "₹${String.format(Locale.US, "%.0f", sum)}"
     }
 
     // ─── Back press ────────────────────────────────────────────

@@ -17,6 +17,7 @@
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.TransbuddyApp"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
         <!-- Google Maps API Key Meta-Data -->
@@ -69,6 +70,12 @@
             android:name=".controllers.StudentDetailActivity"
             android:exported="false"
             android:parentActivityName=".controllers.HomeSearchActivity" />
+
+        <!-- Emergency Notifications -->
+        <activity
+            android:name=".controllers.EmergencyNotificationsActivity"
+            android:exported="false"
+            android:parentActivityName=".controllers.MainActivity" />
 
     </application>
 

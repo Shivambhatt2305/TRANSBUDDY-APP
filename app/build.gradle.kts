@@ -6,7 +6,6 @@ plugins {
 android {
     namespace = "com.transbuddy.app"
     compileSdk = 34
-    buildToolsVersion = "34.0.0"
 
     defaultConfig {
         applicationId = "com.transbuddy.app"
@@ -63,4 +62,5 @@ dependencies {
     // Automatic JavaMail SMTP Email Sender
     implementation("com.sun.mail:android-mail:1.6.7")
     implementation("com.sun.mail:android-activation:1.6.7")
+
 }

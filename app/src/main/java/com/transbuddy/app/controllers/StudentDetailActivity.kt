@@ -182,9 +182,12 @@ class StudentDetailActivity : AppCompatActivity() {
                 btnSendPenaltyEmail.text = "✉️  SEND PENALTY EMAIL"
                 etPenaltyReason.text.clear()
 
+                // Save student penalty to DB Table
+                saveStudentPenaltyToDb(reasonOfPenalty, amount, emailId)
+
                 AlertDialog.Builder(this)
-                    .setTitle("✅ Email Sent Automatically!")
-                    .setMessage("Official penalty notice email with Marwadi University Transportation Dept footer was sent automatically to:\n\n$emailId\n\nReason: $reasonOfPenalty\nFine Amount: ₹$amount")
+                    .setTitle("✅ Email Sent & Saved to DB!")
+                    .setMessage("Official penalty notice email was sent automatically and saved to Database Table for:\n\nName: $studentName\nEmail: $emailId\nReason: $reasonOfPenalty\nFine Amount: ₹$amount")
                     .setPositiveButton("OK", null)
                     .show()
             },
@@ -197,6 +200,48 @@ class StudentDetailActivity : AppCompatActivity() {
                     .setMessage("Could not send email automatically: $error")
                     .setPositiveButton("OK", null)
                     .show()
+            }
+        )
+    }
+
+    private fun saveStudentPenaltyToDb(reasonOfPenalty: String, amount: String, targetEmail: String) {
+        val dbHelper = com.transbuddy.app.utils.PenaltyDatabaseHelper.getInstance(this)
+        val formattedAmount = if (amount.startsWith("₹")) amount else "₹$amount"
+        val numericAmount = amount.replace("[^0-9.]".toRegex(), "").toDoubleOrNull() ?: 500.00
+        val targetIdVal = if (enrollmentNo.isNotEmpty()) enrollmentNo else grNumber
+        val infoStr = if (enrollmentNo.isNotEmpty()) "$studentName ($enrollmentNo) • STUDENT" else "$studentName (GR: $grNumber) • STUDENT"
+
+        val studentPenalty = com.transbuddy.app.models.Penalty(
+            targetType = "STUDENT",
+            targetId = targetIdVal,
+            targetName = studentName,
+            targetEmail = targetEmail,
+            infractionCategory = reasonOfPenalty,
+            infractionReason = reasonOfPenalty,
+            amountNum = numericAmount,
+            amount = formattedAmount,
+            notes = "Assigned via TransBuddy App",
+            status = "PENDING",
+            assignedBy = "Android App",
+            iconType = "student",
+            driverInfo = infoStr,
+            isError = true
+        )
+        // 1. Local SQLite storage
+        dbHelper.insertPenalty(studentPenalty)
+
+        // 2. Sync through the backend API to MySQL Database.
+        com.transbuddy.app.utils.CloudDatabaseManager.syncPenaltyToCloud(
+            penalty = studentPenalty,
+            onSuccess = {
+                Toast.makeText(
+                    this,
+                    "☁️ Live Synced to Admin DB Table: $studentName ($reasonOfPenalty)",
+                    Toast.LENGTH_LONG
+                ).show()
+            },
+            onError = { err ->
+                Toast.makeText(this, "Student penalty saved locally. Cloud sync: $err", Toast.LENGTH_LONG).show()
             }
         )
     }

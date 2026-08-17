@@ -3069,6 +3069,7 @@ drawable design_ic_visibility
 drawable design_ic_visibility_off
 drawable design_password_eye
 drawable design_snackbar_background
+drawable email_footer
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable ic_arrow_back_black_24
@@ -3272,11 +3273,13 @@ id bounceStart
 id btnBack
 id btnClockIn
 id btnDispatch
+id btnEmergencyMore
 id btnFilter
 id btnIssuePenalty
 id btnMenu
 id btnNewLogEntry
 id btnPenaltyMore
+id btnRetry
 id btnRouteMap
 id btnSaveLog
 id btnScanReceipt
@@ -3356,6 +3359,7 @@ id dragStart
 id dragUp
 id drawerLayout
 id drawer_dashboard
+id drawer_emergency
 id drawer_fuel
 id drawer_home_search
 id drawer_operations
@@ -3371,12 +3375,19 @@ id edit_query
 id edit_text_id
 id elastic
 id embed
+id emergencyAppBar
+id emergencyBtnMenu
+id emergencyDrawerLayout
+id emergencyIconContainer
+id emergencyNavigationView
+id emergencyToolbar
 id end
 id endToStart
 id enterAlways
 id enterAlwaysCollapsed
 id etCost
 id etCurrentKm
+id etEmergencySearch
 id etFineAmount
 id etFuelPrice
 id etHomeSearch
@@ -3455,6 +3466,7 @@ id italic
 id item_touch_helper_previous_elevation
 id ivDetailPhoto
 id ivDriverPhoto
+id ivEmergencyIcon
 id ivFuelLogIcon
 id ivMemberPhoto
 id ivPenaltyIcon
@@ -3618,6 +3630,7 @@ id progress_horizontal
 id radio
 id ratio
 id rectangles
+id recyclerViewEmergencies
 id recyclerViewFleet
 id recyclerViewFuelLogs
 id recyclerViewPenalties
@@ -3699,6 +3712,7 @@ id stretch
 id submenuarrow
 id submit_area
 id supportScrollUp
+id tabLayoutEmergency
 id tabMode
 id tag_accessibility_actions
 id tag_accessibility_clickable_spans
@@ -3768,6 +3782,16 @@ id tvDetailSemShift
 id tvDetailStatus
 id tvDriverName
 id tvEmail
+id tvEmergencyBusNo
+id tvEmergencyCount
+id tvEmergencyDescription
+id tvEmergencyDriver
+id tvEmergencyEmpty
+id tvEmergencyLocation
+id tvEmergencySeverity
+id tvEmergencyStatus
+id tvEmergencyTime
+id tvEmergencyTitle
 id tvEta
 id tvFuelCost
 id tvFuelStation
@@ -3946,6 +3970,7 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_emergency_notifications
 layout activity_fuel_logs
 layout activity_home_search
 layout activity_main
@@ -3971,6 +3996,7 @@ layout design_text_input_end_icon
 layout design_text_input_start_icon
 layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
+layout item_emergency
 layout item_fuel_log
 layout item_gr_search
 layout item_penalty
