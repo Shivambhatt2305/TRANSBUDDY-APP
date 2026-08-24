@@ -178,6 +178,9 @@ class EmergencyNotificationsActivity : AppCompatActivity() {
                     startActivity(Intent(this, ViolationsActivity::class.java))
                     finish()
                 }
+                R.id.drawer_logout -> {
+                    com.transbuddy.app.utils.SessionManager.getInstance(this).logout(this)
+                }
                 R.id.drawer_emergency -> { /* already here */ }
             }
             drawerLayout.closeDrawer(GravityCompat.START)

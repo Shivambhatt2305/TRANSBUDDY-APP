@@ -25,15 +25,21 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDe5pFoiZuP1zGA2yR8amD4iRl5nVlzfqg" />
 
-        <!-- Fleet Dashboard (Launcher) -->
+        <!-- Login Activity (Launcher Entry Point) -->
         <activity
-            android:name=".controllers.MainActivity"
-            android:exported="true">
+            android:name=".controllers.LoginActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Fleet Dashboard -->
+        <activity
+            android:name=".controllers.MainActivity"
+            android:exported="false" />
 
         <!-- Fuel & KM Logs -->
         <activity

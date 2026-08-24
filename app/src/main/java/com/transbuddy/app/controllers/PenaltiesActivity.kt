@@ -194,6 +194,9 @@ class PenaltiesActivity : AppCompatActivity() {
                     startActivity(Intent(this, EmergencyNotificationsActivity::class.java))
                     finish()
                 }
+                R.id.drawer_logout -> {
+                    com.transbuddy.app.utils.SessionManager.getInstance(this).logout(this)
+                }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             true

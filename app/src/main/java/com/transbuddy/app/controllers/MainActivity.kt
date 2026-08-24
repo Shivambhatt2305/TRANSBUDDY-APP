@@ -154,6 +154,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        // Update nav header with logged-in user details
+        val headerView = navigationView.getHeaderView(0)
+        val tvHeaderTitle = headerView?.findViewById<android.widget.TextView>(R.id.navHeaderTitle)
+        val tvHeaderSubtitle = headerView?.findViewById<android.widget.TextView>(R.id.navHeaderSubtitle)
+        val currentUser = com.transbuddy.app.utils.SessionManager.getInstance(this).getUser()
+        if (currentUser != null) {
+            tvHeaderTitle?.text = currentUser.fullName.ifBlank { "TransBuddy Admin" }
+            tvHeaderSubtitle?.text = "${currentUser.username} • ${currentUser.role}"
+        }
+
         // Hamburger toggle
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout,
@@ -188,6 +198,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 R.id.drawer_emergency -> {
                     startActivity(Intent(this, EmergencyNotificationsActivity::class.java))
+                }
+                R.id.drawer_logout -> {
+                    com.transbuddy.app.utils.SessionManager.getInstance(this).logout(this)
                 }
                 R.id.drawer_dashboard -> { /* already here */ }
             }
