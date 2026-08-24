@@ -26,7 +26,6 @@ import com.google.android.material.navigation.NavigationView
 import com.transbuddy.app.R
 import com.transbuddy.app.adapters.VehicleAdapter
 import com.transbuddy.app.models.Vehicle
-import com.transbuddy.app.utils.SessionManager
 
 /**
  * MainActivity — CONTROLLER (MVC)
@@ -155,6 +154,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        // Update nav header with logged-in user details
+        val headerView = navigationView.getHeaderView(0)
+        val tvHeaderTitle = headerView?.findViewById<android.widget.TextView>(R.id.navHeaderTitle)
+        val tvHeaderSubtitle = headerView?.findViewById<android.widget.TextView>(R.id.navHeaderSubtitle)
+        val currentUser = com.transbuddy.app.utils.SessionManager.getInstance(this).getUser()
+        if (currentUser != null) {
+            tvHeaderTitle?.text = currentUser.fullName.ifBlank { "TransBuddy Admin" }
+            tvHeaderSubtitle?.text = "${currentUser.username} • ${currentUser.role}"
+        }
+
         // Hamburger toggle
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout,
@@ -167,18 +176,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Menu button (custom button in layout)
         findViewById<android.widget.ImageButton>(R.id.btnMenu).setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
-        }
-
-        // Set user profile in drawer header
-        val headerView = navigationView.getHeaderView(0)
-        if (headerView != null) {
-            val tvTitle = headerView.findViewById<android.widget.TextView>(R.id.navHeaderTitle)
-            val tvSubtitle = headerView.findViewById<android.widget.TextView>(R.id.navHeaderSubtitle)
-            val fullName = SessionManager.getFullName(this)
-            val username = SessionManager.getUsername(this)
-            val role = SessionManager.getRole(this)
-            tvTitle?.text = if (fullName.isNotBlank()) fullName else username
-            tvSubtitle?.text = role
         }
 
         // Drawer item selection
@@ -203,7 +200,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     startActivity(Intent(this, EmergencyNotificationsActivity::class.java))
                 }
                 R.id.drawer_logout -> {
-                    showLogoutConfirmationDialog()
+                    com.transbuddy.app.utils.SessionManager.getInstance(this).logout(this)
                 }
                 R.id.drawer_dashboard -> { /* already here */ }
             }
@@ -212,18 +209,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         // Mark Fleet Dashboard as checked
         navigationView.setCheckedItem(R.id.drawer_dashboard)
-    }
-
-    private fun showLogoutConfirmationDialog() {
-        androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("Logout Confirmation")
-            .setMessage("Are you sure you want to sign out of TransBuddy?")
-            .setIcon(R.drawable.ic_logout)
-            .setPositiveButton("Logout") { _, _ ->
-                SessionManager.logout(this)
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
     }
 
     // ─── RecyclerView ──────────────────────────────────────────

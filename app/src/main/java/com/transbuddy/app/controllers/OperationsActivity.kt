@@ -128,6 +128,9 @@ class OperationsActivity : AppCompatActivity() {
                 R.id.drawer_emergency -> {
                     startActivity(Intent(this, EmergencyNotificationsActivity::class.java)); finish()
                 }
+                R.id.drawer_logout -> {
+                    com.transbuddy.app.utils.SessionManager.getInstance(this).logout(this)
+                }
                 R.id.drawer_operations -> { /* already here */ }
             }
             drawerLayout.closeDrawer(GravityCompat.START)

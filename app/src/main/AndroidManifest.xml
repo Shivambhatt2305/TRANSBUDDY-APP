@@ -25,7 +25,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDe5pFoiZuP1zGA2yR8amD4iRl5nVlzfqg" />
 
-        <!-- Login Activity (Launcher) -->
+        <!-- Login Activity (Launcher Entry Point) -->
         <activity
             android:name=".controllers.LoginActivity"
             android:exported="true"

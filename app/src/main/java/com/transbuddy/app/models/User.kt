@@ -1,14 +1,15 @@
 package com.transbuddy.app.models
 
 /**
- * User — Model representing a TransBuddy user / administrator
+ * User — Data model representing an authenticated user in TransBuddy.
  */
 data class User(
-    val id: Long = 0,
+    val id: Long = 0L,
     val username: String = "",
     val password: String = "",
-    val email: String = "",
     val fullName: String = "",
-    val role: String = "Fleet Manager Admin",
+    val role: String = "ADMIN",
+    val email: String = "",
+    val phone: String = "",
     val createdAt: String = ""
 )

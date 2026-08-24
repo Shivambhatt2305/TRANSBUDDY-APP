@@ -7,9 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.InputType
 import android.view.View
-import android.view.animation.CycleInterpolator
-import android.widget.Button
-import android.widget.CheckBox
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -17,177 +15,153 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import com.transbuddy.app.R
 import com.transbuddy.app.utils.SessionManager
 import com.transbuddy.app.utils.UserDatabaseHelper
 
 /**
- * LoginActivity — CONTROLLER
- * Handles user authentication against local SQLite database (UserDatabaseHelper).
- * Supports pre-configured user 'marwadi' with password 'marwadi@121'.
+ * LoginActivity — CONTROLLER for TransBuddy Authentication
+ * Authenticates user credentials directly against SQLite database (transbuddy_users.db).
+ * Supports default credential (username: 'marwadi', password: 'marwadi@121').
  */
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var etUsername: EditText
     private lateinit var etPassword: EditText
-    private lateinit var btnLogin: Button
-    private lateinit var progressBarLogin: ProgressBar
     private lateinit var btnTogglePassword: ImageButton
-    private lateinit var cbRememberMe: CheckBox
-    private lateinit var layoutError: LinearLayout
+    private lateinit var btnQuickFill: LinearLayout
     private lateinit var tvErrorMessage: TextView
-    private lateinit var layoutDemoCredentials: LinearLayout
-    private lateinit var boxUsername: LinearLayout
-    private lateinit var boxPassword: LinearLayout
+    private lateinit var btnLogin: AppCompatButton
+    private lateinit var pbLogin: ProgressBar
 
+    private lateinit var dbHelper: UserDatabaseHelper
+    private lateinit var sessionManager: SessionManager
     private var isPasswordVisible = false
-    private val mainHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 1. Check if user is already logged in
-        if (SessionManager.isLoggedIn(this)) {
+        sessionManager = SessionManager.getInstance(this)
+        dbHelper = UserDatabaseHelper.getInstance(this)
+
+        // If user is already logged in, navigate straight to MainActivity
+        val isExplicitLogout = intent.getBooleanExtra("EXPLICIT_LOGOUT", false)
+        if (sessionManager.isLoggedIn() && !isExplicitLogout) {
             navigateToDashboard()
             return
         }
 
         setContentView(R.layout.activity_login)
 
-        // 2. Initialize Database & Seed default user
-        UserDatabaseHelper.getInstance(this).ensureTableAndDefaultUser()
-
-        // 3. Bind view references
         bindViews()
-
-        // 4. Setup listeners
-        setupPasswordToggle()
-        setupDemoAutofill()
-        setupLoginButton()
+        setupListeners()
     }
 
     private fun bindViews() {
         etUsername = findViewById(R.id.etUsername)
         etPassword = findViewById(R.id.etPassword)
-        btnLogin = findViewById(R.id.btnLogin)
-        progressBarLogin = findViewById(R.id.progressBarLogin)
         btnTogglePassword = findViewById(R.id.btnTogglePassword)
-        cbRememberMe = findViewById(R.id.cbRememberMe)
-        layoutError = findViewById(R.id.layoutError)
+        btnQuickFill = findViewById(R.id.btnQuickFill)
         tvErrorMessage = findViewById(R.id.tvErrorMessage)
-        layoutDemoCredentials = findViewById(R.id.layoutDemoCredentials)
-        boxUsername = findViewById(R.id.boxUsername)
-        boxPassword = findViewById(R.id.boxPassword)
+        btnLogin = findViewById(R.id.btnLogin)
+        pbLogin = findViewById(R.id.pbLogin)
     }
 
-    private fun setupPasswordToggle() {
+    private fun setupListeners() {
+        // Toggle password visibility
         btnTogglePassword.setOnClickListener {
-            isPasswordVisible = !isPasswordVisible
-            if (isPasswordVisible) {
-                etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                btnTogglePassword.setImageResource(R.drawable.ic_visibility_off)
-            } else {
-                etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                btnTogglePassword.setImageResource(R.drawable.ic_visibility)
-            }
-            // Preserve cursor position at end of text
+            togglePasswordVisibility()
+        }
+
+        // Quick Autofill Demo Credentials
+        btnQuickFill.setOnClickListener {
+            etUsername.setText("marwadi")
+            etPassword.setText("marwadi@121")
             etPassword.setSelection(etPassword.text.length)
+            tvErrorMessage.visibility = View.GONE
+            Toast.makeText(this, "Credentials filled: marwadi / marwadi@121", Toast.LENGTH_SHORT).show()
         }
-    }
 
-    private fun setupDemoAutofill() {
-        layoutDemoCredentials.setOnClickListener {
-            etUsername.setText(UserDatabaseHelper.DEFAULT_USERNAME)
-            etPassword.setText(UserDatabaseHelper.DEFAULT_PASSWORD)
-            hideError()
-            Toast.makeText(this, "Credentials filled from database default!", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun setupLoginButton() {
+        // Login button
         btnLogin.setOnClickListener {
             performLogin()
         }
+    }
+
+    private fun togglePasswordVisibility() {
+        isPasswordVisible = !isPasswordVisible
+        if (isPasswordVisible) {
+            etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            btnTogglePassword.setImageResource(R.drawable.ic_visibility_off)
+        } else {
+            etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            btnTogglePassword.setImageResource(R.drawable.ic_visibility)
+        }
+        etPassword.setSelection(etPassword.text.length)
     }
 
     private fun performLogin() {
         val username = etUsername.text.toString().trim()
         val password = etPassword.text.toString().trim()
 
-        hideError()
+        tvErrorMessage.visibility = View.GONE
 
-        // Input verification
         if (username.isEmpty()) {
-            showError("Please enter your username.", boxUsername)
+            showError("Please enter your username or email.")
             etUsername.requestFocus()
             return
         }
 
         if (password.isEmpty()) {
-            showError("Please enter your password.", boxPassword)
+            showError("Please enter your password.")
             etPassword.requestFocus()
             return
         }
 
-        // Show loading state
+        // Show loading spinner
         setLoading(true)
 
-        // Verify credentials in background thread
-        Thread {
-            val dbHelper = UserDatabaseHelper.getInstance(this)
-            val user = dbHelper.verifyCredentials(username, password)
+        // Query Database on background handler
+        Handler(Looper.getMainLooper()).postDelayed({
+            val user = dbHelper.authenticate(username, password)
+            setLoading(false)
 
-            // Simulate slight natural verification delay for smooth UX
-            Thread.sleep(300)
-
-            mainHandler.post {
-                setLoading(false)
-                if (user != null) {
-                    // Success: Save session and proceed
-                    val rememberMe = cbRememberMe.isChecked
-                    SessionManager.createLoginSession(this, user, rememberMe)
-
-                    Toast.makeText(
-                        this,
-                        "Welcome, ${user.fullName.ifBlank { user.username }}!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    navigateToDashboard()
-                } else {
-                    // Failure: Display error feedback
-                    showError("Invalid username or password. Please verify your credentials.", findViewById(R.id.cardLogin))
-                }
+            if (user != null) {
+                // Success: save user session
+                sessionManager.createLoginSession(user)
+                Toast.makeText(this, "Welcome, ${user.fullName}!", Toast.LENGTH_SHORT).show()
+                navigateToDashboard()
+            } else {
+                // Failed: show error feedback
+                showError("Invalid username or password. Please verify the credentials in database.")
+                shakeView(tvErrorMessage)
             }
-        }.start()
+        }, 300)
     }
 
-    private fun setLoading(isLoading: Boolean) {
-        if (isLoading) {
+    private fun setLoading(loading: Boolean) {
+        if (loading) {
             btnLogin.text = ""
+            pbLogin.visibility = View.VISIBLE
             btnLogin.isEnabled = false
-            progressBarLogin.visibility = View.VISIBLE
         } else {
-            btnLogin.text = "Sign In to TransBuddy"
+            btnLogin.text = "Sign In to Fleet Hub"
+            pbLogin.visibility = View.GONE
             btnLogin.isEnabled = true
-            progressBarLogin.visibility = View.GONE
         }
     }
 
-    private fun showError(message: String, targetToShake: View? = null) {
+    private fun showError(message: String) {
         tvErrorMessage.text = message
-        layoutError.visibility = View.VISIBLE
-
-        targetToShake?.let {
-            val shake = ObjectAnimator.ofFloat(it, "translationX", 0f, 15f, -15f, 10f, -10f, 5f, -5f, 0f)
-            shake.duration = 450
-            shake.interpolator = CycleInterpolator(1f)
-            shake.start()
-        }
+        tvErrorMessage.visibility = View.VISIBLE
     }
 
-    private fun hideError() {
-        layoutError.visibility = View.GONE
+    private fun shakeView(view: View) {
+        val animator = ObjectAnimator.ofFloat(view, "translationX", 0f, 20f, -20f, 15f, -15f, 6f, -6f, 0f)
+        animator.duration = 400
+        animator.interpolator = AccelerateDecelerateInterpolator()
+        animator.start()
     }
 
     private fun navigateToDashboard() {

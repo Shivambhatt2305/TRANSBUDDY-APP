@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:fillViewport="true"
-    android:background="@color/surface"
-    tools:context=".controllers.LoginActivity">
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,66 +16,68 @@
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:paddingTop="36dp"
-        android:paddingBottom="36dp">
+        android:paddingBottom="28dp">
 
-        <!-- ═══════════════════════════════════════════════════════
-             BRAND HEADER
-        ═══════════════════════════════════════════════════════ -->
-        <FrameLayout
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:background="@drawable/bg_neo_raised_circle"
-            android:elevation="6dp"
-            android:padding="16dp">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_transport_bus"
-                android:contentDescription="TransBuddy Logo"
-                app:tint="@color/primary" />
-        </FrameLayout>
-
-        <!-- App Name -->
-        <TextView
+        <!-- Top Header & Branding -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="TransBuddy"
-            android:textColor="@color/primary"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.02" />
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-        <!-- University Badge -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/bg_badge_marwadi"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:text="MARWADI UNIVERSITY FLEET"
-            android:textColor="@color/primary"
-            android:textSize="11sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.06" />
+            <!-- App Logo Icon Circle -->
+            <FrameLayout
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:background="@drawable/bg_neo_raised_circle"
+                android:elevation="6dp"
+                android:padding="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Real-Time Campus Transit &amp; Operations"
-            android:textColor="@color/on_surface_variant"
-            android:textSize="13sp" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_transport_bus"
+                    android:contentDescription="TransBuddy Logo" />
+            </FrameLayout>
 
-        <!-- ═══════════════════════════════════════════════════════
-             LOGIN CARD CONTAINER
-        ═══════════════════════════════════════════════════════ -->
+            <!-- App Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="TRANSBUDDY"
+                android:textColor="@color/primary"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.06" />
+
+            <!-- Subtitle -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Fleet &amp; Transit Operations Hub"
+                android:textColor="@color/on_surface_variant"
+                android:textSize="13sp" />
+
+            <!-- Campus Badge -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_badge_marwadi"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="Marwadi University Campus"
+                android:textColor="@color/primary"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Login Card Container -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
@@ -87,12 +89,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="22dp">
+                android:padding="24dp">
 
+                <!-- Card Heading -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Portal Login"
+                    android:text="Welcome Back"
                     android:textColor="@color/on_surface"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -100,250 +103,211 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="Enter database credentials to proceed"
+                    android:layout_marginTop="4dp"
+                    android:text="Sign in with your database credentials"
                     android:textColor="@color/on_surface_variant"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
 
-                <!-- Error Alert Box -->
-                <LinearLayout
-                    android:id="@+id/layoutError"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/bg_badge_delay"
-                    android:padding="10dp"
-                    android:visibility="gone"
-                    tools:visibility="visible">
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:src="@android:drawable/ic_dialog_alert"
-                        app:tint="@color/error"
-                        android:contentDescription="Error Icon" />
-
-                    <TextView
-                        android:id="@+id/tvErrorMessage"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:text="Invalid username or password"
-                        android:textColor="@color/error"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- Username Field -->
+                <!-- Username / Email Field Label -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Username / User ID"
+                    android:layout_marginTop="20dp"
+                    android:text="Username / Email"
                     android:textColor="@color/on_surface"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
+                <!-- Username Input Box -->
                 <LinearLayout
-                    android:id="@+id/boxUsername"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="52dp"
                     android:layout_marginTop="6dp"
                     android:background="@drawable/bg_input_box"
-                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp">
+                    android:gravity="center_vertical"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp">
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_person"
-                        app:tint="@color/primary"
                         android:contentDescription="Username Icon" />
 
                     <EditText
                         android:id="@+id/etUsername"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:layout_marginStart="10dp"
                         android:background="@null"
                         android:hint="e.g. marwadi"
-                        android:imeOptions="actionNext"
-                        android:inputType="text"
-                        android:maxLines="1"
                         android:textColor="@color/on_surface"
                         android:textColorHint="@color/outline"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:inputType="textEmailAddress|text"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true" />
                 </LinearLayout>
 
-                <!-- Password Field -->
+                <!-- Password Field Label -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
+                    android:layout_marginTop="16dp"
                     android:text="Password"
                     android:textColor="@color/on_surface"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
+                <!-- Password Input Box -->
                 <LinearLayout
-                    android:id="@+id/boxPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="52dp"
                     android:layout_marginTop="6dp"
                     android:background="@drawable/bg_input_box"
-                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="8dp">
+                    android:gravity="center_vertical"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp">
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_lock"
-                        app:tint="@color/primary"
-                        android:contentDescription="Password Icon" />
+                        android:contentDescription="Lock Icon" />
 
                     <EditText
                         android:id="@+id/etPassword"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
                         android:layout_weight="1"
+                        android:layout_marginStart="10dp"
                         android:background="@null"
-                        android:hint="Enter password"
-                        android:imeOptions="actionDone"
-                        android:inputType="textPassword"
-                        android:maxLines="1"
+                        android:hint="e.g. marwadi@121"
                         android:textColor="@color/on_surface"
                         android:textColorHint="@color/outline"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:inputType="textPassword"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true" />
 
                     <ImageButton
                         android:id="@+id/btnTogglePassword"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Toggle Password Visibility"
                         android:src="@drawable/ic_visibility"
-                        app:tint="@color/on_surface_variant" />
+                        android:contentDescription="Toggle Password Visibility" />
                 </LinearLayout>
 
-                <!-- Remember Me & Help -->
+                <!-- Quick Autofill Preset Chip -->
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/btnQuickFill"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="14dp"
+                    android:background="@drawable/bg_demo_chip"
+                    android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:clickable="true"
+                    android:focusable="true">
 
-                    <CheckBox
-                        android:id="@+id/cbRememberMe"
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:buttonTint="@color/primary"
-                        android:checked="true"
-                        android:text="Remember me"
-                        android:textColor="@color/on_surface_variant"
-                        android:textSize="13sp" />
+                        android:text="⚡ Auto-Fill: "
+                        android:textColor="@color/primary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="marwadi / marwadi@121"
+                        android:textColor="@color/on_surface"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
-                <!-- Sign In Button with Loading -->
+                <!-- Error Message View -->
+                <TextView
+                    android:id="@+id/tvErrorMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_alert_banner"
+                    android:padding="10dp"
+                    android:text="Invalid credentials. Please check your username and password."
+                    android:textColor="@color/error"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <!-- Login Button -->
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="20dp">
 
-                    <android.widget.Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btnLogin"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_btn_primary_simple"
-                        android:text="Sign In to TransBuddy"
-                        android:textAllCaps="false"
+                        android:text="Sign In to Fleet Hub"
                         android:textColor="@color/on_primary"
                         android:textSize="15sp"
                         android:textStyle="bold"
+                        android:textAllCaps="false"
                         android:elevation="4dp" />
 
                     <ProgressBar
-                        android:id="@+id/progressBarLogin"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:id="@+id/pbLogin"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
                         android:layout_gravity="center"
                         android:indeterminateTint="@color/on_primary"
                         android:visibility="gone" />
                 </FrameLayout>
 
+                <!-- Database Status Badge -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <View
+                        android:layout_width="7dp"
+                        android:layout_height="7dp"
+                        android:background="@drawable/bg_neo_raised_circle"
+                        android:backgroundTint="@color/live_green" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:text="SQLite Database Auth • Active"
+                        android:textColor="@color/on_surface_variant"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- ═══════════════════════════════════════════════════════
-             PRE-POPULATED CREDENTIAL HELPER (Tap to autofill)
-        ═══════════════════════════════════════════════════════ -->
-        <LinearLayout
-            android:id="@+id/layoutDemoCredentials"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_demo_chip"
-            android:orientation="vertical"
-            android:padding="14dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@android:drawable/ic_dialog_info"
-                    app:tint="@color/primary"
-                    android:contentDescription="Info Icon" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:text="Pre-configured DB Account"
-                    android:textColor="@color/primary"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:text="(Tap to fill)"
-                    android:textColor="@color/on_surface_variant"
-                    android:textSize="11sp" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="User: marwadi  •  Password: marwadi@121"
-                android:textColor="@color/on_surface"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- Footer -->
+        <!-- System Footer -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Marwadi University Transit Management • TransBuddy v1.0"
+            android:layout_marginTop="28dp"
+            android:text="TransBuddy • Marwadi University Transport Management"
             android:textColor="@color/outline"
             android:textSize="11sp"
             android:gravity="center" />
