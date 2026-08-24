@@ -26,6 +26,7 @@ import com.google.android.material.navigation.NavigationView
 import com.transbuddy.app.R
 import com.transbuddy.app.adapters.VehicleAdapter
 import com.transbuddy.app.models.Vehicle
+import com.transbuddy.app.utils.SessionManager
 
 /**
  * MainActivity — CONTROLLER (MVC)
@@ -168,6 +169,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
+        // Set user profile in drawer header
+        val headerView = navigationView.getHeaderView(0)
+        if (headerView != null) {
+            val tvTitle = headerView.findViewById<android.widget.TextView>(R.id.navHeaderTitle)
+            val tvSubtitle = headerView.findViewById<android.widget.TextView>(R.id.navHeaderSubtitle)
+            val fullName = SessionManager.getFullName(this)
+            val username = SessionManager.getUsername(this)
+            val role = SessionManager.getRole(this)
+            tvTitle?.text = if (fullName.isNotBlank()) fullName else username
+            tvSubtitle?.text = role
+        }
+
         // Drawer item selection
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -189,6 +202,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 R.id.drawer_emergency -> {
                     startActivity(Intent(this, EmergencyNotificationsActivity::class.java))
                 }
+                R.id.drawer_logout -> {
+                    showLogoutConfirmationDialog()
+                }
                 R.id.drawer_dashboard -> { /* already here */ }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
@@ -196,6 +212,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         // Mark Fleet Dashboard as checked
         navigationView.setCheckedItem(R.id.drawer_dashboard)
+    }
+
+    private fun showLogoutConfirmationDialog() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Logout Confirmation")
+            .setMessage("Are you sure you want to sign out of TransBuddy?")
+            .setIcon(R.drawable.ic_logout)
+            .setPositiveButton("Logout") { _, _ ->
+                SessionManager.logout(this)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     // ─── RecyclerView ──────────────────────────────────────────
