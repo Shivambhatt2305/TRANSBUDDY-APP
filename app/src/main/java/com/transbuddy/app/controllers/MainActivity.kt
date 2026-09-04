@@ -184,6 +184,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 R.id.drawer_home_search -> {
                     startActivity(Intent(this, HomeSearchActivity::class.java))
                 }
+                R.id.drawer_face_penalty -> {
+                    startActivity(Intent(this, FaceRecognitionPenaltyActivity::class.java))
+                }
                 R.id.drawer_fuel -> {
                     startActivity(Intent(this, FuelLogsActivity::class.java))
                 }
@@ -214,8 +217,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     // ─── RecyclerView ──────────────────────────────────────────
     private fun setupRecyclerView() {
         vehicleAdapter = VehicleAdapter(fleetData)
+        val columns = resources.getInteger(R.integer.fleet_grid_columns)
         recyclerViewFleet.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@MainActivity, columns)
             adapter = vehicleAdapter
             isNestedScrollingEnabled = false
         }

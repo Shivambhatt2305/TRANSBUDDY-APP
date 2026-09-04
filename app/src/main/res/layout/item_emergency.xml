@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="12dp"
     app:cardBackgroundColor="@color/surface"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="1dp">
+    app:cardCornerRadius="14dp"
+    app:cardElevation="3dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,6 +14,7 @@
         android:orientation="vertical"
         android:padding="14dp">
 
+        <!-- Top Header row: Icon, Title, Location, Severity Chip, Status -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,15 +23,15 @@
 
             <FrameLayout
                 android:id="@+id/emergencyIconContainer"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
                 android:background="@drawable/bg_search_bar"
                 android:layout_marginEnd="12dp">
 
                 <ImageView
                     android:id="@+id/ivEmergencyIcon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     android:layout_gravity="center"
                     android:src="@android:drawable/ic_dialog_alert"
                     app:tint="@color/error" />
@@ -47,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/on_surface"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
                     android:maxLines="1"
                     android:ellipsize="end" />
@@ -106,16 +107,18 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Emergency Description -->
         <TextView
             android:id="@+id/tvEmergencyDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/on_surface_variant"
-            android:textSize="12sp"
-            android:layout_marginTop="8dp"
-            android:maxLines="2"
+            android:textSize="13sp"
+            android:layout_marginTop="10dp"
+            android:maxLines="3"
             android:ellipsize="end" />
 
+        <!-- Bus & Timestamp Info -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -127,16 +130,9 @@
                 android:id="@+id/tvEmergencyBusNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/on_surface_variant"
-                android:textSize="11sp" />
-
-            <TextView
-                android:id="@+id/tvEmergencyDriver"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/on_surface_variant"
-                android:textSize="11sp"
-                android:layout_marginStart="12dp" />
+                android:textColor="@color/primary"
+                android:textStyle="bold"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tvEmergencyTime"
@@ -145,6 +141,86 @@
                 android:textColor="@color/on_surface_variant"
                 android:textSize="11sp"
                 android:layout_marginStart="12dp" />
+        </LinearLayout>
+
+        <!-- Driver Details & Direct Call Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_search_bar"
+            android:padding="12dp"
+            android:layout_marginTop="10dp">
+
+            <!-- Driver Icon Container -->
+            <FrameLayout
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_neo_raised_circle"
+                android:layout_marginEnd="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_person"
+                    app:tint="@color/primary" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvEmergencyDriver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/on_surface"
+                    android:textStyle="bold"
+                    android:textSize="13sp"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="3dp">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/ic_phone"
+                        app:tint="@color/primary"
+                        android:layout_marginEnd="4dp" />
+
+                    <TextView
+                        android:id="@+id/tvEmergencyDriverPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary"
+                        android:textStyle="bold"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCallEmergencyDriver"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Call Driver"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                app:icon="@drawable/ic_phone"
+                app:iconTint="@android:color/white"
+                app:iconSize="14dp"
+                app:backgroundTint="#16A34A"
+                app:cornerRadius="10dp" />
         </LinearLayout>
 
     </LinearLayout>

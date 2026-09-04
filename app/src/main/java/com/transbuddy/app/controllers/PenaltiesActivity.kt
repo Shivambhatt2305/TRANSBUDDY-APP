@@ -167,11 +167,18 @@ class PenaltiesActivity : AppCompatActivity() {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
+        findViewById<android.view.View>(R.id.btnLaunchFacePenaltyScanner)?.setOnClickListener {
+            startActivity(Intent(this, FaceRecognitionPenaltyActivity::class.java))
+        }
+
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.drawer_home_search -> {
                     startActivity(Intent(this, HomeSearchActivity::class.java))
                     finish()
+                }
+                R.id.drawer_face_penalty -> {
+                    startActivity(Intent(this, FaceRecognitionPenaltyActivity::class.java))
                 }
                 R.id.drawer_dashboard -> {
                     startActivity(Intent(this, MainActivity::class.java))
@@ -224,8 +231,9 @@ class PenaltiesActivity : AppCompatActivity() {
         penaltyAdapter = PenaltyAdapter(penaltyData) { penalty ->
             Toast.makeText(this, "Options for: ${penalty.title}", Toast.LENGTH_SHORT).show()
         }
+        val columns = resources.getInteger(R.integer.search_grid_columns)
         recyclerViewPenalties.apply {
-            layoutManager = LinearLayoutManager(this@PenaltiesActivity)
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@PenaltiesActivity, columns)
             adapter = penaltyAdapter
             isNestedScrollingEnabled = false
         }

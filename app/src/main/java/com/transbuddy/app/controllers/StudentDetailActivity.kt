@@ -130,6 +130,27 @@ class StudentDetailActivity : AppCompatActivity() {
     private fun setupListeners() {
         btnBack.setOnClickListener { finish() }
 
+        tvDetailPhone.setOnClickListener {
+            val phone = studentPhone.trim()
+            if (phone.isNotEmpty() && phone != "N/A") {
+                val cleanPhone = phone.replace(" ", "")
+                val dialIntent = Intent(Intent.ACTION_DIAL, android.net.Uri.parse("tel:$cleanPhone"))
+                startActivity(dialIntent)
+            } else {
+                Toast.makeText(this, "No phone number available for this student", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        tvDetailEmail.setOnClickListener {
+            val email = studentEmail.trim()
+            if (email.isNotEmpty() && email != "N/A") {
+                val mailIntent = Intent(Intent.ACTION_SENDTO, android.net.Uri.parse("mailto:$email"))
+                startActivity(mailIntent)
+            } else {
+                Toast.makeText(this, "No email address available for this student", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         btnSendPenaltyEmail.setOnClickListener {
             val reason = etPenaltyReason.text.toString().trim()
             val amount = etPenaltyAmount.text.toString().trim()

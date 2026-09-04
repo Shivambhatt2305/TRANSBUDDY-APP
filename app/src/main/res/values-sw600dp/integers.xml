@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="fleet_grid_columns">2</integer>
+    <integer name="search_grid_columns">2</integer>
+    <integer name="kpi_grid_columns">3</integer>
+    <integer name="pickup_grid_columns">2</integer>
+</resources>

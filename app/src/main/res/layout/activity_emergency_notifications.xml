@@ -32,16 +32,16 @@
                     android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Open menu"
-                    android:src="@android:drawable/ic_menu_manage"
+                    android:src="@drawable/ic_menu_hamburger"
                     app:tint="@color/primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Emergency Notifications"
+                    android:text="Transbuddy"
                     android:textColor="@color/primary"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
@@ -53,11 +53,25 @@
             app:layout_constraintTop_toBottomOf="@id/emergencyAppBar"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:paddingStart="@dimen/screen_padding_horizontal"
+                    android:paddingEnd="@dimen/screen_padding_horizontal"
+                    android:paddingTop="@dimen/screen_padding_vertical"
+                    android:paddingBottom="@dimen/screen_bottom_padding"
+                    app:layout_constraintWidth_max="@dimen/content_max_width"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -71,11 +85,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="All active and resolved emergency alerts from the fleet."
+                    android:text="Real-time emergency distress alerts with direct driver calling."
                     android:textColor="@color/on_surface_variant"
                     android:textSize="13sp"
                     android:layout_marginBottom="16dp" />
 
+                <!-- Search Bar -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,7 +113,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
-                        android:hint="Search..."
+                        android:hint="Search by Driver, Bus, Location, or Status..."
                         android:textColorHint="@color/on_surface_variant"
                         android:textColor="@color/on_surface"
                         android:textSize="14sp"
@@ -154,7 +169,8 @@
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false" />
 
-            </LinearLayout>
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

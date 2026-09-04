@@ -18,9 +18,11 @@ data class Penalty(
     val notes: String = "Assigned via TransBuddy App",
     val status: String = "PENDING",
     val assignedBy: String = "Android App",
+    val photoUrl: String = "",
     val createdAt: String = "",
     val iconType: String = "speeding",
     val driverInfo: String = "",                // UI label fallback
     val isError: Boolean = true,
     val title: String = ""                     // UI label title
 )
+

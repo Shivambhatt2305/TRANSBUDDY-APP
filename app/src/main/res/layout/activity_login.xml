@@ -8,22 +8,24 @@
     android:fillViewport="true"
     android:fitsSystemWindows="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
+        android:paddingStart="@dimen/screen_padding_horizontal"
+        android:paddingEnd="@dimen/screen_padding_horizontal"
         android:paddingTop="36dp"
-        android:paddingBottom="28dp">
+        android:paddingBottom="@dimen/screen_bottom_padding">
 
         <!-- Top Header & Branding -->
         <LinearLayout
+            android:id="@+id/layoutBranding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <!-- App Logo Icon Circle -->
             <FrameLayout
@@ -31,13 +33,13 @@
                 android:layout_height="76dp"
                 android:background="@drawable/bg_neo_raised_circle"
                 android:elevation="6dp"
-                android:padding="16dp">
+                android:padding="8dp">
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_transport_bus"
-                    android:contentDescription="TransBuddy Logo" />
+                    android:src="@drawable/marwadi_app_logo"
+                    android:contentDescription="Marwadi University TransBuddy Logo" />
             </FrameLayout>
 
             <!-- App Title -->
@@ -76,20 +78,25 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Login Card Container -->
+        <!-- Login Card Container with Responsive Max-Width Constraint for Tablets -->
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
+            android:id="@+id/cardLoginContainer"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="6dp"
+            app:layout_constraintWidth_max="@dimen/login_card_max_width"
+            app:layout_constraintTop_toBottomOf="@id/layoutBranding"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardElevation="@dimen/card_elevation"
             app:cardBackgroundColor="@color/surface_container_lowest">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="24dp">
+                android:padding="@dimen/card_padding">
 
                 <!-- Card Heading -->
                 <TextView
@@ -121,7 +128,7 @@
                 <!-- Username Input Box -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="@dimen/input_box_height"
                     android:layout_marginTop="6dp"
                     android:background="@drawable/bg_input_box"
                     android:orientation="horizontal"
@@ -142,7 +149,7 @@
                         android:layout_weight="1"
                         android:layout_marginStart="10dp"
                         android:background="@null"
-                        android:hint="e.g. marwadi"
+                        android:hint="Username"
                         android:textColor="@color/on_surface"
                         android:textColorHint="@color/outline"
                         android:textSize="14sp"
@@ -164,7 +171,7 @@
                 <!-- Password Input Box -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="@dimen/input_box_height"
                     android:layout_marginTop="6dp"
                     android:background="@drawable/bg_input_box"
                     android:orientation="horizontal"
@@ -185,7 +192,7 @@
                         android:layout_weight="1"
                         android:layout_marginStart="10dp"
                         android:background="@null"
-                        android:hint="e.g. marwadi@121"
+                        android:hint="Password"
                         android:textColor="@color/on_surface"
                         android:textColorHint="@color/outline"
                         android:textSize="14sp"
@@ -202,37 +209,7 @@
                         android:contentDescription="Toggle Password Visibility" />
                 </LinearLayout>
 
-                <!-- Quick Autofill Preset Chip -->
-                <LinearLayout
-                    android:id="@+id/btnQuickFill"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:background="@drawable/bg_demo_chip"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
-                    android:clickable="true"
-                    android:focusable="true">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="⚡ Auto-Fill: "
-                        android:textColor="@color/primary"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="marwadi / marwadi@121"
-                        android:textColor="@color/on_surface"
-                        android:textSize="12sp" />
-                </LinearLayout>
 
                 <!-- Error Message View -->
                 <TextView
@@ -310,7 +287,10 @@
             android:text="TransBuddy • Marwadi University Transport Management"
             android:textColor="@color/outline"
             android:textSize="11sp"
-            android:gravity="center" />
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/cardLoginContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

@@ -14,11 +14,11 @@ import com.transbuddy.app.models.FuelLog
 /**
  * FuelLogAdapter (VIEW component in MVC)
  * Binds FuelLog MODEL data to item_fuel_log.xml.
- * The most recent entry uses primary/indigo icon tint;
- * older entries use on_surface_variant grey.
+ * Supports clicking an item to view complete refuel details and receipt photo.
  */
 class FuelLogAdapter(
-    private var logs: List<FuelLog>
+    private var logs: List<FuelLog>,
+    private val onItemClick: ((FuelLog) -> Unit)? = null
 ) : RecyclerView.Adapter<FuelLogAdapter.FuelLogViewHolder>() {
 
     class FuelLogViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -41,9 +41,9 @@ class FuelLogAdapter(
         val ctx = holder.itemView.context
 
         holder.tvStation.text   = log.stationName
-        holder.tvTimestamp.text = "${log.timestamp} • ${"%.1f".format(log.liters)} L"
+        holder.tvTimestamp.text = "${log.timestamp} • ${"%.1f".format(log.liters)} L/KG"
         holder.tvCost.text      = "₹ ${"%.2f".format(log.totalCost)}"
-        holder.tvTrip.text      = "${log.tripKm} km trip"
+        holder.tvTrip.text      = "${log.tripKm} km"
 
         // Most-recent entry → primary icon tint; others → grey
         val tintColor = if (log.isRecent)
@@ -52,6 +52,10 @@ class FuelLogAdapter(
             ctx.getColor(R.color.on_surface_variant)
 
         holder.ivIcon.imageTintList = ColorStateList.valueOf(tintColor)
+
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(log)
+        }
     }
 
     override fun getItemCount(): Int = logs.size

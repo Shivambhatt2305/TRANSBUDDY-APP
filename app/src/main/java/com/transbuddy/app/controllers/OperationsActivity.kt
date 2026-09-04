@@ -113,6 +113,9 @@ class OperationsActivity : AppCompatActivity() {
                 R.id.drawer_home_search -> {
                     startActivity(Intent(this, HomeSearchActivity::class.java)); finish()
                 }
+                R.id.drawer_face_penalty -> {
+                    startActivity(Intent(this, FaceRecognitionPenaltyActivity::class.java))
+                }
                 R.id.drawer_dashboard -> {
                     startActivity(Intent(this, MainActivity::class.java)); finish()
                 }
@@ -166,7 +169,7 @@ class OperationsActivity : AppCompatActivity() {
                 shiftStartMillis = System.currentTimeMillis()
                 btnLabel?.text   = "Clock Out"
                 Toast.makeText(this, "✓ Clocked in! Shift timer started.", Toast.LENGTH_SHORT).show()
-                // TODO: trigger camera / biometric verification
+                startActivity(Intent(this, FaceRecognitionPenaltyActivity::class.java))
             } else {
                 isClockedIn      = false
                 btnLabel?.text   = "Clock In Now"
@@ -207,13 +210,13 @@ class OperationsActivity : AppCompatActivity() {
     // ─── Quick Tools ───────────────────────────────────────────
     private fun setupQuickTools() {
         findViewById<CardView>(R.id.btnRouteMap).setOnClickListener {
-            Toast.makeText(this, "Route Map — coming soon.", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, MainActivity::class.java))
         }
         findViewById<CardView>(R.id.btnDispatch).setOnClickListener {
-            Toast.makeText(this, "Dispatch — coming soon.", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, EmergencyNotificationsActivity::class.java))
         }
         findViewById<TextView>(R.id.btnViewAllLogs).setOnClickListener {
-            Toast.makeText(this, "All Logs — coming soon.", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, FuelLogsActivity::class.java))
         }
     }
 

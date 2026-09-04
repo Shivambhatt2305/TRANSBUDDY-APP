@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+
+    <!-- Outer Crest Shield -->
+    <path
+        android:fillColor="#1E293B"
+        android:pathData="M48,8 L78,20 C78,54 48,86 48,86 C48,86 18,54 18,20 Z" />
+
+    <!-- Gold Shield Border -->
+    <path
+        android:strokeColor="#F59E0B"
+        android:strokeWidth="2.5"
+        android:fillColor="#00000000"
+        android:pathData="M48,10 L76,21 C76,52 48,83 48,83 C48,83 20,52 20,21 Z" />
+
+    <!-- Inner Shield Accent -->
+    <path
+        android:fillColor="#0F172A"
+        android:pathData="M48,16 L70,25 C70,50 48,74 48,74 C48,74 26,50 26,25 Z" />
+
+    <!-- Academic Cap / University Laurel Top -->
+    <path
+        android:fillColor="#FBBF24"
+        android:pathData="M48,27 L33,35 L48,42 L63,35 Z" />
+    <path
+        android:fillColor="#D97706"
+        android:pathData="M59,38.5 L59,48 C59,48 55,51 48,51 C41,51 37,48 37,48 L37,38.5 L48,43.5 Z" />
+    <path
+        android:strokeColor="#FBBF24"
+        android:strokeWidth="1.5"
+        android:pathData="M61,36 L61,46 L63,48" />
+
+    <!-- TransBuddy Transit Bus inside Shield -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M38,62 C38,63.1 38.9,64 40,64 L41,64 C42.1,64 43,63.1 43,62 L43,60 L53,60 L53,62 C53,63.1 53.9,64 55,64 L56,64 C57.1,64 58,63.1 58,62 L58,58 C58.6,57.5 59,56.7 59,55.8 L59,52 C59,49.5 54,49 48,49 C42,49 37,49.5 37,52 L37,55.8 C37,56.7 37.4,57.5 38,58 Z" />
+
+    <!-- Bus Windshield -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M39,53 L57,53 L56.5,50.8 C54,50.3 50,50.2 48,50.2 C46,50.2 42,50.3 39.5,50.8 Z" />
+
+    <!-- Bus Headlights -->
+    <path
+        android:fillColor="#FEF08A"
+        android:pathData="M40.5,56.5 A1.5,1.5 0 1,0 43.5,56.5 A1.5,1.5 0 1,0 40.5,56.5 Z" />
+    <path
+        android:fillColor="#FEF08A"
+        android:pathData="M52.5,56.5 A1.5,1.5 0 1,0 55.5,56.5 A1.5,1.5 0 1,0 52.5,56.5 Z" />
+
+    <!-- Star Accent at bottom -->
+    <path
+        android:fillColor="#F59E0B"
+        android:pathData="M48,68 L49.2,71.5 L53,71.5 L50,73.5 L51.2,77 L48,74.8 L44.8,77 L46,73.5 L43,71.5 L46.8,71.5 Z" />
+
+</vector>

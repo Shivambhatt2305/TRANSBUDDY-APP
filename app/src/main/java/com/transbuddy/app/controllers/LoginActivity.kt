@@ -1,6 +1,7 @@
 package com.transbuddy.app.controllers
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -23,14 +24,13 @@ import com.transbuddy.app.utils.UserDatabaseHelper
 /**
  * LoginActivity — CONTROLLER for TransBuddy Authentication
  * Authenticates user credentials directly against SQLite database (transbuddy_users.db).
- * Supports default credential (username: 'marwadi', password: 'marwadi@121').
+ * Supports persistent autofill of previously entered credentials.
  */
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var etUsername: EditText
     private lateinit var etPassword: EditText
     private lateinit var btnTogglePassword: ImageButton
-    private lateinit var btnQuickFill: LinearLayout
     private lateinit var tvErrorMessage: TextView
     private lateinit var btnLogin: AppCompatButton
     private lateinit var pbLogin: ProgressBar
@@ -62,7 +62,6 @@ class LoginActivity : AppCompatActivity() {
         etUsername = findViewById(R.id.etUsername)
         etPassword = findViewById(R.id.etPassword)
         btnTogglePassword = findViewById(R.id.btnTogglePassword)
-        btnQuickFill = findViewById(R.id.btnQuickFill)
         tvErrorMessage = findViewById(R.id.tvErrorMessage)
         btnLogin = findViewById(R.id.btnLogin)
         pbLogin = findViewById(R.id.pbLogin)
@@ -72,15 +71,6 @@ class LoginActivity : AppCompatActivity() {
         // Toggle password visibility
         btnTogglePassword.setOnClickListener {
             togglePasswordVisibility()
-        }
-
-        // Quick Autofill Demo Credentials
-        btnQuickFill.setOnClickListener {
-            etUsername.setText("marwadi")
-            etPassword.setText("marwadi@121")
-            etPassword.setSelection(etPassword.text.length)
-            tvErrorMessage.visibility = View.GONE
-            Toast.makeText(this, "Credentials filled: marwadi / marwadi@121", Toast.LENGTH_SHORT).show()
         }
 
         // Login button
@@ -128,7 +118,6 @@ class LoginActivity : AppCompatActivity() {
             setLoading(false)
 
             if (user != null) {
-                // Success: save user session
                 sessionManager.createLoginSession(user)
                 Toast.makeText(this, "Welcome, ${user.fullName}!", Toast.LENGTH_SHORT).show()
                 navigateToDashboard()
@@ -137,7 +126,7 @@ class LoginActivity : AppCompatActivity() {
                 showError("Invalid username or password. Please verify the credentials in database.")
                 shakeView(tvErrorMessage)
             }
-        }, 300)
+        }, 200)
     }
 
     private fun setLoading(loading: Boolean) {

@@ -5,14 +5,16 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.transbuddy.app.R
@@ -24,12 +26,11 @@ import com.transbuddy.app.models.ViolationAlert
  *
  * Manages the Violations & Fee Alerts screen:
  *  - Search bar filters the alerts list in real-time
- *  - Filter button (stub — ready for bottom-sheet filter dialog)
- *  - KPI stat cards: Critical Alerts | Unpaid Fees | Invalid Scans
- *  - Recent Alerts RecyclerView with:
- *      · Review button → marks item resolved in-place (markResolved)
- *      · Resolved items show strikethrough + "Resolved" chip
- *  - Navigation Drawer (Violations checked) + Bottom Nav (Alerts active)
+ *  - Interactive filter dialog (All, Active, Resolved, Unauthorized, Unpaid, Invalid Scan)
+ *  - Dynamic KPI stat cards: Critical Alerts | Unpaid Fees | Invalid Scans
+ *  - Recent Alerts RecyclerView with review & resolve actions
+ *  - Responsive grid layout for tablets and phones
+ *  - Navigation Drawer
  */
 class ViolationsActivity : AppCompatActivity() {
 
@@ -43,7 +44,7 @@ class ViolationsActivity : AppCompatActivity() {
     // ─── Adapter + Data ────────────────────────────────────────
     private lateinit var violationAdapter: ViolationAdapter
 
-    private val alertData = listOf(
+    private val alertData = mutableListOf(
         ViolationAlert(
             alertType  = "unauthorized",
             title      = "Unauthorized Rider",
@@ -77,14 +78,15 @@ class ViolationsActivity : AppCompatActivity() {
         setupRecyclerView()
         setupSearch()
         setupFilterButton()
+        updateKpiCounts()
     }
 
     // ─── View binding ──────────────────────────────────────────
     private fun bindViews() {
-        drawerLayout          = findViewById(R.id.violationsDrawerLayout)
-        navigationView        = findViewById(R.id.violationsNavigationView)
-        toolbar               = findViewById(R.id.violationsToolbar)
-        etSearch              = findViewById(R.id.etViolationSearch)
+        drawerLayout           = findViewById(R.id.violationsDrawerLayout)
+        navigationView         = findViewById(R.id.violationsNavigationView)
+        toolbar                = findViewById(R.id.violationsToolbar)
+        etSearch               = findViewById(R.id.etViolationSearch)
         recyclerViewViolations = findViewById(R.id.recyclerViewViolations)
     }
 
@@ -136,19 +138,33 @@ class ViolationsActivity : AppCompatActivity() {
         navigationView.setCheckedItem(R.id.drawer_violations)
     }
 
+    // ─── Dynamic KPI calculations ──────────────────────────────
+    private fun updateKpiCounts() {
+        val critical = alertData.count { !it.isResolved }
+        val invalid  = alertData.count { it.alertType == "invalid_scan" }
+        findViewById<TextView>(R.id.tvCriticalCount)?.text = critical.toString()
+        findViewById<TextView>(R.id.tvInvalidScanCount)?.text = invalid.toString()
+    }
+
     // ─── Recent Alerts RecyclerView ────────────────────────────
     private fun setupRecyclerView() {
         violationAdapter = ViolationAdapter(alertData) { alert, position ->
             // Review button tapped → mark as resolved in-place
+            val indexInMaster = alertData.indexOfFirst { it.title == alert.title && it.time == alert.time }
+            if (indexInMaster != -1) {
+                alertData[indexInMaster] = alertData[indexInMaster].copy(isResolved = true)
+            }
             violationAdapter.markResolved(position)
+            updateKpiCounts()
             Toast.makeText(
                 this,
                 "✓ \"${alert.title}\" marked as resolved.",
                 Toast.LENGTH_SHORT
             ).show()
         }
+        val columns = resources.getInteger(R.integer.search_grid_columns)
         recyclerViewViolations.apply {
-            layoutManager = LinearLayoutManager(this@ViolationsActivity)
+            layoutManager = GridLayoutManager(this@ViolationsActivity, columns)
             adapter = violationAdapter
             isNestedScrollingEnabled = false
         }
@@ -165,11 +181,33 @@ class ViolationsActivity : AppCompatActivity() {
         })
     }
 
-    // ─── Filter button (stub) ──────────────────────────────────
+    // ─── Filter dialog ─────────────────────────────────────────
     private fun setupFilterButton() {
         findViewById<CardView>(R.id.btnFilter).setOnClickListener {
-            // TODO: show BottomSheetDialog with filter options (type, status, time range)
-            Toast.makeText(this, "Filter options — coming soon.", Toast.LENGTH_SHORT).show()
+            val options = arrayOf(
+                "All Violations",
+                "Active / Unresolved Only",
+                "Resolved Only",
+                "Unauthorized Riders",
+                "Unpaid Fares",
+                "Invalid ID Scans"
+            )
+            AlertDialog.Builder(this)
+                .setTitle("Filter Alerts")
+                .setItems(options) { _, which ->
+                    val filtered = when (which) {
+                        1 -> alertData.filter { !it.isResolved }
+                        2 -> alertData.filter { it.isResolved }
+                        3 -> alertData.filter { it.alertType == "unauthorized" }
+                        4 -> alertData.filter { it.alertType == "unpaid" }
+                        5 -> alertData.filter { it.alertType == "invalid_scan" }
+                        else -> alertData
+                    }
+                    violationAdapter.updateData(filtered)
+                    Toast.makeText(this, "Filter: ${options[which]} (${filtered.size} items)", Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton("Close", null)
+                .show()
         }
     }
 

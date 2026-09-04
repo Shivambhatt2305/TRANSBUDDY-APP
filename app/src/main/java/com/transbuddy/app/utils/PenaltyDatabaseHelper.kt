@@ -33,6 +33,7 @@ class PenaltyDatabaseHelper private constructor(context: Context) :
         const val COLUMN_NOTES = "notes"
         const val COLUMN_CREATED_AT = "created_at"
         const val COLUMN_STATUS = "status"
+        const val COLUMN_PHOTO_URL = "photo_url"
 
         @Volatile
         private var instance: PenaltyDatabaseHelper? = null
@@ -57,7 +58,8 @@ class PenaltyDatabaseHelper private constructor(context: Context) :
                 $COLUMN_TARGET_EMAIL TEXT,
                 $COLUMN_NOTES TEXT,
                 $COLUMN_CREATED_AT TEXT,
-                $COLUMN_STATUS TEXT DEFAULT 'PENDING'
+                $COLUMN_STATUS TEXT DEFAULT 'PENDING',
+                $COLUMN_PHOTO_URL TEXT
             )
         """.trimIndent()
         db.execSQL(createTableQuery)
@@ -65,7 +67,7 @@ class PenaltyDatabaseHelper private constructor(context: Context) :
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         // Preserve penalties during upgrades—especially records waiting for
-        // cloud upload. The old implementation deleted the entire table here.
+        // cloud upload.
         addColumnIfMissing(db, COLUMN_TARGET_TYPE, "TEXT NOT NULL DEFAULT 'DRIVER'")
         addColumnIfMissing(db, COLUMN_ICON_TYPE, "TEXT NOT NULL DEFAULT 'speeding'")
         addColumnIfMissing(db, COLUMN_TITLE, "TEXT NOT NULL DEFAULT 'Violation'")
@@ -76,6 +78,7 @@ class PenaltyDatabaseHelper private constructor(context: Context) :
         addColumnIfMissing(db, COLUMN_NOTES, "TEXT")
         addColumnIfMissing(db, COLUMN_CREATED_AT, "TEXT")
         addColumnIfMissing(db, COLUMN_STATUS, "TEXT DEFAULT 'PENDING'")
+        addColumnIfMissing(db, COLUMN_PHOTO_URL, "TEXT")
     }
 
     private fun addColumnIfMissing(db: SQLiteDatabase, column: String, definition: String) {
@@ -101,6 +104,7 @@ class PenaltyDatabaseHelper private constructor(context: Context) :
             put(COLUMN_IS_ERROR, if (penalty.isError) 1 else 0)
             put(COLUMN_TARGET_EMAIL, penalty.targetEmail)
             put(COLUMN_NOTES, penalty.notes)
+            put(COLUMN_PHOTO_URL, penalty.photoUrl)
 
             val dateStr = if (penalty.createdAt.isBlank()) {
                 SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault()).format(Date())
@@ -137,6 +141,7 @@ class PenaltyDatabaseHelper private constructor(context: Context) :
                 val idxNotes = it.getColumnIndex(COLUMN_NOTES)
                 val idxCreatedAt = it.getColumnIndex(COLUMN_CREATED_AT)
                 val idxStatus = it.getColumnIndex(COLUMN_STATUS)
+                val idxPhotoUrl = it.getColumnIndex(COLUMN_PHOTO_URL)
 
                 while (it.moveToNext()) {
                     val p = Penalty(
@@ -150,7 +155,8 @@ class PenaltyDatabaseHelper private constructor(context: Context) :
                         targetEmail = if (idxTargetEmail != -1) (it.getString(idxTargetEmail) ?: "") else "",
                         notes = if (idxNotes != -1) (it.getString(idxNotes) ?: "") else "",
                         createdAt = if (idxCreatedAt != -1) (it.getString(idxCreatedAt) ?: "") else "",
-                        status = if (idxStatus != -1) (it.getString(idxStatus) ?: "PENDING") else "PENDING"
+                        status = if (idxStatus != -1) (it.getString(idxStatus) ?: "PENDING") else "PENDING",
+                        photoUrl = if (idxPhotoUrl != -1) (it.getString(idxPhotoUrl) ?: "") else ""
                     )
                     list.add(p)
                 }

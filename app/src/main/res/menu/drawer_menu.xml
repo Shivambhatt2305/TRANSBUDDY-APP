@@ -9,6 +9,10 @@
         android:title="Student Penalties"
         android:icon="@android:drawable/ic_menu_search" />
     <item
+        android:id="@+id/drawer_face_penalty"
+        android:title="Face Recognition Penalty"
+        android:icon="@android:drawable/ic_menu_camera" />
+    <item
         android:id="@+id/drawer_violations"
         android:title="Alerts &amp; Notifications"
         android:icon="@android:drawable/ic_dialog_alert" />

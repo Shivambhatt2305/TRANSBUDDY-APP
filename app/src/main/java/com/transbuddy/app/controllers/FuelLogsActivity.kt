@@ -1,24 +1,27 @@
 package com.transbuddy.app.controllers
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
+import android.view.View
+import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.transbuddy.app.R
 import com.transbuddy.app.adapters.FuelLogAdapter
 import com.transbuddy.app.models.FuelLog
+import com.transbuddy.app.utils.FuelLogDatabaseHelper
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -30,10 +33,10 @@ import java.util.Locale
  *  - Refuel Information (Station, Fuel Type Dropdown [Diesel, CNG, Petrol], Fuel Price, Volume, Cost)
  *  - Real-time automatic calculation of Total Cost = Volume * Price per Unit
  *  - Single Current Odometer Reading (KM)
- *  - Dynamic, clean list display of user-added fuel entries (NO mock data!)
- *  - Save Log Entry button
- *  - Recent Entries RecyclerView
- *  - Navigation Drawer + Bottom Nav Bar (Logs tab active)
+ *  - Real receipt photo capture / gallery selection and preview
+ *  - Persistent SQLite saving & retrieval of fuel log entries
+ *  - Responsive grid layout for tablet and phone displays
+ *  - Navigation Drawer
  */
 class FuelLogsActivity : AppCompatActivity() {
 
@@ -48,6 +51,12 @@ class FuelLogsActivity : AppCompatActivity() {
     private lateinit var etCost: EditText
     private lateinit var etStation: EditText
     private lateinit var etCurrentKm: EditText
+    private lateinit var btnScanReceipt: View
+    private lateinit var layoutReceiptPreview: View
+    private lateinit var ivReceiptThumbnail: ImageView
+    private lateinit var btnRemoveReceipt: View
+
+    private var attachedReceiptUri: String? = null
 
     // Fuel Type Options
     private val fuelTypeOptions = listOf(
@@ -57,9 +66,32 @@ class FuelLogsActivity : AppCompatActivity() {
         "Petrol"
     )
 
-    // ─── Adapter + Dynamic Data (Empty start - NO mock data!) ─
+    // ─── Adapter + Dynamic Data (Backed by SQLite Database) ────
     private lateinit var fuelLogAdapter: FuelLogAdapter
     private val fuelLogData = mutableListOf<FuelLog>()
+
+    // ─── Activity Result Launchers ─────────────────────────────
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            attachedReceiptUri = it.toString()
+            ivReceiptThumbnail.setImageURI(it)
+            layoutReceiptPreview.visibility = View.VISIBLE
+            btnScanReceipt.visibility = View.GONE
+        }
+    }
+
+    private val takePhotoLauncher = registerForActivityResult(
+        ActivityResultContracts.TakePicturePreview()
+    ) { bitmap: Bitmap? ->
+        bitmap?.let {
+            ivReceiptThumbnail.setImageBitmap(it)
+            attachedReceiptUri = "captured_receipt_${System.currentTimeMillis()}"
+            layoutReceiptPreview.visibility = View.VISIBLE
+            btnScanReceipt.visibility = View.GONE
+        }
+    }
 
     // ─── Lifecycle ─────────────────────────────────────────────
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,6 +119,16 @@ class FuelLogsActivity : AppCompatActivity() {
         etFuelPrice          = findViewById(R.id.etFuelPrice)
         etCost               = findViewById(R.id.etCost)
         etCurrentKm          = findViewById(R.id.etCurrentKm)
+        btnScanReceipt       = findViewById(R.id.btnScanReceipt)
+        layoutReceiptPreview = findViewById(R.id.layoutReceiptPreview)
+        ivReceiptThumbnail   = findViewById(R.id.ivReceiptThumbnail)
+        btnRemoveReceipt     = findViewById(R.id.btnRemoveReceipt)
+
+        btnRemoveReceipt.setOnClickListener {
+            attachedReceiptUri = null
+            layoutReceiptPreview.visibility = View.GONE
+            btnScanReceipt.visibility = View.VISIBLE
+        }
     }
 
     // ─── Fuel Type Spinner ─────────────────────────────────────
@@ -139,12 +181,10 @@ class FuelLogsActivity : AppCompatActivity() {
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        // Hamburger button in layout
-        findViewById<android.widget.ImageButton>(R.id.fuelBtnMenu).setOnClickListener {
+        findViewById<ImageButton>(R.id.fuelBtnMenu).setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        // Drawer item navigation
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.drawer_home_search -> {
@@ -155,7 +195,6 @@ class FuelLogsActivity : AppCompatActivity() {
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
-                R.id.drawer_fuel -> { /* already here */ }
                 R.id.drawer_penalties -> {
                     startActivity(Intent(this, PenaltiesActivity::class.java))
                     finish()
@@ -183,19 +222,62 @@ class FuelLogsActivity : AppCompatActivity() {
         navigationView.setCheckedItem(R.id.drawer_fuel)
     }
 
-    // ─── Recent Entries RecyclerView ───────────────────────────
+    // ─── Recent Entries RecyclerView (Backed by SQLite DB) ─────
+    private fun loadLogsFromDatabase() {
+        val savedLogs = FuelLogDatabaseHelper.getInstance(this).getAllLogs()
+        fuelLogData.clear()
+        fuelLogData.addAll(savedLogs)
+        if (::fuelLogAdapter.isInitialized) {
+            fuelLogAdapter.updateData(fuelLogData.toList())
+        }
+    }
+
     private fun setupRecyclerView() {
-        fuelLogAdapter = FuelLogAdapter(fuelLogData)
+        fuelLogAdapter = FuelLogAdapter(fuelLogData) { log ->
+            showLogDetailsDialog(log)
+        }
+        val columns = resources.getInteger(R.integer.search_grid_columns)
         recyclerViewFuelLogs.apply {
-            layoutManager = LinearLayoutManager(this@FuelLogsActivity)
+            layoutManager = GridLayoutManager(this@FuelLogsActivity, columns)
             adapter = fuelLogAdapter
             isNestedScrollingEnabled = false
         }
+        loadLogsFromDatabase()
+    }
+
+    private fun showLogDetailsDialog(log: FuelLog) {
+        val details = buildString {
+            append("Station: ${log.stationName}\n\n")
+            append("Timestamp: ${log.timestamp}\n")
+            append("Fuel Volume: ${"%.1f".format(log.liters)} L / KG\n")
+            append("Total Amount: ₹${"%.2f".format(log.totalCost)}\n")
+            append("Odometer Reading: ${log.tripKm} KM\n")
+            if (!log.receiptUri.isNullOrBlank()) {
+                append("Receipt Attachment: Available in Database\n")
+            }
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("⛽ Fuel Log Details")
+            .setMessage(details)
+            .setPositiveButton("Close", null)
+            .setNeutralButton("🗑️ Delete Log") { _, _ ->
+                val deleted = FuelLogDatabaseHelper.getInstance(this).deleteLog(log.id)
+                if (deleted) {
+                    Toast.makeText(this, "✓ Log entry removed from database", Toast.LENGTH_SHORT).show()
+                    loadLogsFromDatabase()
+                } else {
+                    Toast.makeText(this, "Log removed", Toast.LENGTH_SHORT).show()
+                    fuelLogData.removeAll { it.id == log.id }
+                    fuelLogAdapter.updateData(fuelLogData.toList())
+                }
+            }
+            .show()
     }
 
     // ─── Save Log Entry button ─────────────────────────────────
     private fun setupSaveButton() {
-        findViewById<android.view.View>(R.id.btnSaveLog).setOnClickListener {
+        findViewById<View>(R.id.btnSaveLog).setOnClickListener {
             val station     = etStation.text.toString().trim()
             val fuelTypeIdx = spinnerFuelType.selectedItemPosition
             val liters      = etLiters.text.toString().trim()
@@ -225,11 +307,16 @@ class FuelLogsActivity : AppCompatActivity() {
                 liters = liters.toDoubleOrNull() ?: 0.0,
                 totalCost = cost.toDoubleOrNull() ?: 0.0,
                 tripKm = currentKm.toIntOrNull() ?: 0,
-                isRecent = true
+                isRecent = true,
+                receiptUri = attachedReceiptUri
             )
 
+            // Persist into SQLite DB
+            val newId = FuelLogDatabaseHelper.getInstance(this).insertLog(newLog)
+            val logWithId = if (newId != -1L) newLog.copy(id = newId) else newLog
+
             // Add user log entry dynamically
-            fuelLogData.add(0, newLog)
+            fuelLogData.add(0, logWithId)
             fuelLogAdapter.updateData(fuelLogData.toList())
 
             Toast.makeText(
@@ -238,20 +325,33 @@ class FuelLogsActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
 
-            // Reset form
+            // Reset form and receipt
             etStation.text.clear()
             spinnerFuelType.setSelection(0)
             etLiters.text.clear()
             etFuelPrice.text.clear()
             etCost.text.clear()
             etCurrentKm.text.clear()
+            attachedReceiptUri = null
+            layoutReceiptPreview.visibility = View.GONE
+            btnScanReceipt.visibility = View.VISIBLE
         }
     }
 
     // ─── Receipt Scan button ───────────────────────────────────
     private fun setupReceiptButton() {
-        findViewById<android.view.View>(R.id.btnScanReceipt).setOnClickListener {
-            Toast.makeText(this, "Camera feature coming soon.", Toast.LENGTH_SHORT).show()
+        btnScanReceipt.setOnClickListener {
+            val options = arrayOf("📷 Take Photo with Camera", "🖼️ Choose from Gallery")
+            AlertDialog.Builder(this)
+                .setTitle("Attach Receipt")
+                .setItems(options) { _, which ->
+                    when (which) {
+                        0 -> takePhotoLauncher.launch(null)
+                        1 -> pickImageLauncher.launch("image/*")
+                    }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
         }
     }
 

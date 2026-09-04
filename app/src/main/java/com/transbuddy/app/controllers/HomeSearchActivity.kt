@@ -55,14 +55,22 @@ class HomeSearchActivity : AppCompatActivity() {
         const val MODE_GR     = 0
         const val MODE_PICKUP = 1
         const val MODE_ALL    = 2
-    }
 
-    // Real Student & Faculty records sourced directly from database tables (`students_detail` & `faculty_detail`)
-    private val studentList by lazy {
-        listOf(
-        StudentRider(
-            grNumber     = "116617",
-            enrollmentNo = "92200133003",
+        fun findStudentByGr(gr: String): StudentRider? {
+            val clean = gr.trim().replace("GR-", "", true).replace("GR", "", true).lowercase()
+            if (clean.isEmpty() || clean == "—" || clean == "null") return null
+            return studentList.find {
+                it.grNumber.trim().replace("GR-", "", true).replace("GR", "", true).equals(clean, ignoreCase = true) ||
+                it.enrollmentNo.trim().equals(clean, ignoreCase = true)
+            }
+        }
+
+        // Real Student & Faculty records sourced directly from database tables (`students_detail` & `faculty_detail`)
+        val studentList: List<StudentRider> by lazy {
+            listOf(
+            StudentRider(
+                grNumber     = "116617",
+                enrollmentNo = "92200133003",
             name         = "Prashant Sarvaiya",
             department   = "ICT-DEGREE",
             semester     = "Sem 8",
@@ -4399,13 +4407,14 @@ class HomeSearchActivity : AppCompatActivity() {
     ) }
 
     // Data for Pickup Points with Assigned Buses & Driver Photos
-    private val pickupBusList = listOf(
-        PickupPointBus("Central Station, Gate 2", "Downtown / Zone A", "TB-102", "Michael Scott", "07:30 AM", 18, StudentRider.buildFacultyPhotoUrl("EMP102")),
-        PickupPointBus("North Park Terminal",    "North Zone B",      "TB-442", "Dwight Schrute", "07:45 AM", 24, StudentRider.buildFacultyPhotoUrl("EMP204")),
-        PickupPointBus("City Center Plaza",     "Central Business",  "TB-089", "Jim Halpert",     "08:00 AM", 12, StudentRider.buildFacultyPhotoUrl("EMP310")),
-        PickupPointBus("East Suburb Junction",  "East Zone C",       "TB-205", "Pam Beesly",     "07:15 AM", 30, StudentRider.buildFacultyPhotoUrl("EMP102")),
-        PickupPointBus("West Highway Stop 4",   "West Zone D",       "TB-310", "Ryan Howard",    "07:50 AM", 15, StudentRider.buildFacultyPhotoUrl("EMP204"))
-    )
+        val pickupBusList = listOf(
+            PickupPointBus("Central Station, Gate 2", "Downtown / Zone A", "TB-102", "Michael Scott", "07:30 AM", 18, StudentRider.buildFacultyPhotoUrl("EMP102")),
+            PickupPointBus("North Park Terminal",    "North Zone B",      "TB-442", "Dwight Schrute", "07:45 AM", 24, StudentRider.buildFacultyPhotoUrl("EMP204")),
+            PickupPointBus("City Center Plaza",     "Central Business",  "TB-089", "Jim Halpert",     "08:00 AM", 12, StudentRider.buildFacultyPhotoUrl("EMP310")),
+            PickupPointBus("East Suburb Junction",  "East Zone C",       "TB-205", "Pam Beesly",     "07:15 AM", 30, StudentRider.buildFacultyPhotoUrl("EMP102")),
+            PickupPointBus("West Highway Stop 4",   "West Zone D",       "TB-310", "Ryan Howard",    "07:50 AM", 15, StudentRider.buildFacultyPhotoUrl("EMP204"))
+        )
+    }
 
     // ─── Lifecycle ─────────────────────────────────────────────
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -4428,6 +4437,41 @@ class HomeSearchActivity : AppCompatActivity() {
         tvSectionTitle  = findViewById(R.id.tvSectionTitle)
         rvGrResults     = findViewById(R.id.rvGrResults)
         rvPickupResults = findViewById(R.id.rvPickupResults)
+
+        val tabStudents = findViewById<TextView>(R.id.tabStudents)
+        val tabPickups  = findViewById<TextView>(R.id.tabPickups)
+
+        tabStudents?.setOnClickListener {
+            currentMode = MODE_GR
+            tabStudents.setBackgroundResource(R.drawable.bg_tab_pill_selected)
+            tabStudents.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.on_primary))
+            tabPickups?.setBackgroundResource(R.drawable.bg_tab_pill_unselected)
+            tabPickups?.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.on_surface))
+
+            tvSectionTitle.text = "Student & Faculty Member Search Results"
+            etSearch.hint = "Search by GR Number, Name, Department..."
+            rvGrResults.visibility     = View.VISIBLE
+            rvPickupResults.visibility = View.GONE
+            triggerSearch(etSearch.text?.toString() ?: "")
+        }
+
+        tabPickups?.setOnClickListener {
+            currentMode = MODE_PICKUP
+            tabPickups.setBackgroundResource(R.drawable.bg_tab_pill_selected)
+            tabPickups.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.on_primary))
+            tabStudents?.setBackgroundResource(R.drawable.bg_tab_pill_unselected)
+            tabStudents?.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.on_surface))
+
+            tvSectionTitle.text = "Pickup Points & Assigned Buses (${pickupBusList.size})"
+            etSearch.hint = "Search pickup point or bus ID..."
+            rvGrResults.visibility     = View.GONE
+            rvPickupResults.visibility = View.VISIBLE
+            triggerSearch(etSearch.text?.toString() ?: "")
+        }
+
+        findViewById<View>(R.id.btnLaunchFaceScan)?.setOnClickListener {
+            startActivity(Intent(this, FaceRecognitionPenaltyActivity::class.java))
+        }
 
         etSearch.hint = "Search by GR Number, Name, Department..."
         tvSectionTitle.text = "Student & Faculty Member Search Results"
@@ -4455,6 +4499,9 @@ class HomeSearchActivity : AppCompatActivity() {
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.drawer_home_search -> { /* already here */ }
+                R.id.drawer_face_penalty -> {
+                    startActivity(Intent(this, FaceRecognitionPenaltyActivity::class.java))
+                }
                 R.id.drawer_dashboard -> {
                     startActivity(Intent(this, MainActivity::class.java)); finish()
                 }
@@ -4469,6 +4516,12 @@ class HomeSearchActivity : AppCompatActivity() {
                 }
                 R.id.drawer_violations -> {
                     startActivity(Intent(this, ViolationsActivity::class.java)); finish()
+                }
+                R.id.drawer_emergency -> {
+                    startActivity(Intent(this, EmergencyNotificationsActivity::class.java)); finish()
+                }
+                R.id.drawer_logout -> {
+                    com.transbuddy.app.utils.SessionManager.getInstance(this).logout(this)
                 }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
@@ -4502,9 +4555,12 @@ class HomeSearchActivity : AppCompatActivity() {
     private val backgroundExecutor = java.util.concurrent.Executors.newSingleThreadExecutor()
 
     private fun setupRecyclerViews() {
+        val searchColumns = resources.getInteger(R.integer.search_grid_columns)
+        val pickupColumns = resources.getInteger(R.integer.pickup_grid_columns)
+
         grAdapter = GrSearchAdapter(emptyList())
         rvGrResults.apply {
-            layoutManager = LinearLayoutManager(this@HomeSearchActivity)
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@HomeSearchActivity, searchColumns)
             adapter = grAdapter
             setHasFixedSize(true)
             setItemViewCacheSize(25)
@@ -4514,7 +4570,7 @@ class HomeSearchActivity : AppCompatActivity() {
 
         pickupAdapter = PickupBusAdapter(pickupBusList)
         rvPickupResults.apply {
-            layoutManager = LinearLayoutManager(this@HomeSearchActivity)
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@HomeSearchActivity, pickupColumns)
             adapter = pickupAdapter
             setHasFixedSize(true)
             setItemViewCacheSize(25)
@@ -4540,35 +4596,44 @@ class HomeSearchActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                val rawQuery = s?.toString() ?: ""
-                searchRunnable?.let { searchHandler.removeCallbacks(it) }
-                searchRunnable = Runnable {
-                    val queryLower = rawQuery.trim().lowercase()
-                    backgroundExecutor.execute {
-                        val filtered = if (queryLower.isEmpty()) {
-                            studentList.take(50)
-                        } else if (!isIndexedReady) {
-                            studentList.filter {
-                                it.grNumber.contains(queryLower, ignoreCase = true) ||
-                                it.name.contains(queryLower, ignoreCase = true) ||
-                                it.enrollmentNo.contains(queryLower, ignoreCase = true)
-                            }.take(50)
-                        } else {
-                            indexedStudentList
-                                .asSequence()
-                                .filter { it.searchKey.contains(queryLower) }
-                                .map { it.rider }
-                                .take(50)
-                                .toList()
-                        }
-                        runOnUiThread {
-                            grAdapter.updateData(filtered)
-                        }
-                    }
-                }
-                searchHandler.postDelayed(searchRunnable!!, 60)
+                triggerSearch(s?.toString() ?: "")
             }
         })
+    }
+
+    private fun triggerSearch(rawQuery: String) {
+        searchRunnable?.let { searchHandler.removeCallbacks(it) }
+        searchRunnable = Runnable {
+            val queryLower = rawQuery.trim().lowercase()
+            if (currentMode == MODE_PICKUP) {
+                runOnUiThread {
+                    pickupAdapter.filter(queryLower, pickupBusList)
+                }
+            } else {
+                backgroundExecutor.execute {
+                    val filtered = if (queryLower.isEmpty()) {
+                        studentList.take(50)
+                    } else if (!isIndexedReady) {
+                        studentList.filter {
+                            it.grNumber.contains(queryLower, ignoreCase = true) ||
+                            it.name.contains(queryLower, ignoreCase = true) ||
+                            it.enrollmentNo.contains(queryLower, ignoreCase = true)
+                        }.take(50)
+                    } else {
+                        indexedStudentList
+                            .asSequence()
+                            .filter { it.searchKey.contains(queryLower) }
+                            .map { it.rider }
+                            .take(50)
+                            .toList()
+                    }
+                    runOnUiThread {
+                        grAdapter.updateData(filtered)
+                    }
+                }
+            }
+        }
+        searchHandler.postDelayed(searchRunnable!!, 60)
     }
 
     override fun onBackPressed() {
